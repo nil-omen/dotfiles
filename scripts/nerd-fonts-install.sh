@@ -27,7 +27,7 @@ declare -a fonts=(
     # FiraMono
     # Go-Mono
     # Gohu
-    Hack  # around 17 MB
+    # Hack  # around 17 MB
     # Hasklig
     # HeavyData
     # Hermit
@@ -41,7 +41,7 @@ declare -a fonts=(
     # Lekton
     # LiberationMono
     # Lilex
-    # Meslo  # great font but big size around 100 MB or a little more
+    Meslo  # great font but big size around 100 MB or a little more
     # Monofur
     # Mononoki  # nice and small font around 14 MB
     # Monoid
