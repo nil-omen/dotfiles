@@ -46,6 +46,20 @@ if &shell =~# 'fish$'
 endif
 
 
+" Automatically create directories for backup, undo, and swap files
+if !isdirectory($HOME . "/.vim/files/backup")
+    call mkdir($HOME . "/.vim/files/backup", "p")
+endif
+if !isdirectory($HOME . "/.vim/files/swap")
+    call mkdir($HOME . "/.vim/files/swap", "p")
+endif
+if !isdirectory($HOME . "/.vim/files/undo")
+    call mkdir($HOME . "/.vim/files/undo", "p")
+endif
+if !isdirectory($HOME . "/.vim/files/info")
+    call mkdir($HOME . "/.vim/files/info", "p")
+endif
+
 " Put all temporary files under the same directory.
 " https://github.com/mhinz/vim-galore#temporary-files
 set backup
