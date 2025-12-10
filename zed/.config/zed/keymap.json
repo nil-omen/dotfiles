@@ -24,5 +24,12 @@
     "bindings": {
       "alt-r": ["task::Spawn", { "task_name": "go run file" }]
     }
+  },
+
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-shift-v": "markdown::OpenPreviewToTheSide"
+    }
   }
 ]
