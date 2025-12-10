@@ -80,7 +80,8 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 save_to_clipboard = true
 
 [cursor]
-style = "Underline"
+style = { shape = "Block", blinking = "Always" }
+blink_interval = 750
 vi_mode_style = "None"
 unfocused_hollow = true
 thickness = 0.15
@@ -177,4 +178,3 @@ import = [
 ]
 live_config_reload = true
 working_directory = "None"
-
