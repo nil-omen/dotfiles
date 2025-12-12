@@ -1,0 +1,32 @@
+# Monokai Soda Theme
+[colors.primary]
+background = "#222222"
+foreground = "#F6F6EF"
+
+[colors.cursor]
+text = "#222222"
+cursor = "#F6F6EF"
+
+[colors.selection]
+text = "#F6F6EF"
+background = "#444444"
+
+[colors.normal]
+black   = "#222222"
+red     = "#F4005F"
+green   = "#98E024"
+yellow  = "#FA8419"
+blue    = "#58D1EB"
+magenta = "#9D65FF"
+cyan    = "#58D1EB"
+white   = "#C4C5B5"
+
+[colors.bright]
+black   = "#625E4C"
+red     = "#F4005F"
+green   = "#98E024"
+yellow  = "#E0D561"
+blue    = "#58D1EB"
+magenta = "#9D65FF"
+cyan    = "#58D1EB"
+white   = "#F6F6EF"

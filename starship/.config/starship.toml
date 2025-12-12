@@ -26,19 +26,10 @@ $time\
 [ ](fg:purple)\
 $line_break$character"""
 
-palette = 'catppuccin_mocha'
-
-[palettes.gruvbox_dark]
-color_fg0 = '#fbf1c7'
-color_bg1 = '#3c3836'
-color_bg3 = '#665c54'
-color_blue = '#458588'
-color_aqua = '#689d6a'
-color_green = '#98971a'
-color_orange = '#d65d0e'
-color_purple = '#b16286'
-color_red = '#cc241d'
-color_yellow = '#d79921'
+# --- THEME SWITCHER ---
+# Change this string to switch themes:
+# Options: "catppuccin_mocha", "aci", "monokai_soda"
+palette = 'monokai_soda'
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
@@ -68,6 +59,64 @@ base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
 
+[palettes.aci]
+# Mapped Aci colors to your layout keys
+rosewater = "#ff1e8e"
+flamingo = "#ff0883"
+pink = "#ff1e8e"
+orange = "#ff8e1e"
+red = "#ff0883"
+maroon = "#ff0883"
+peach = "#ff8308" # Aci Orange
+yellow = "#ff8308"
+green = "#83ff08" # Aci Green
+teal = "#08ff83"  # Aci Cyan
+sky = "#1e8eff"
+sapphire = "#0883ff"
+blue = "#0883ff"
+lavender = "#b4e1fd"
+text = "#b4e1fd"
+subtext1 = "#b6b6b6"
+subtext0 = "#b6b6b6"
+overlay2 = "#424242"
+overlay1 = "#363636"
+overlay0 = "#363636"
+surface2 = "#424242"
+surface1 = "#363636"
+surface0 = "#363636" # Background for OS/User modules
+base = "#0d1926"     # Main Background
+mantle = "#0d1926"
+crust = "#0d1926"
+
+[palettes.monokai_soda]
+# Mapped Monokai colors to your layout keys
+rosewater = "#f4005f"
+flamingo = "#f4005f"
+pink = "#f4005f"
+orange = "#fa8419"
+red = "#f4005f"
+maroon = "#f4005f"
+peach = "#fa8419" # Monokai Orange
+yellow = "#e0d561"
+green = "#98e024" # Monokai Green
+teal = "#58d1eb"  # Monokai Cyan
+sky = "#58d1eb"
+sapphire = "#9d65ff"
+blue = "#58d1eb"
+lavender = "#f6f6ef"
+text = "#f6f6ef"
+subtext1 = "#c4c5b5"
+subtext0 = "#625e4c"
+overlay2 = "#625e4c"
+overlay1 = "#444444"
+overlay0 = "#444444"
+surface2 = "#444444"
+surface1 = "#222222"
+surface0 = "#444444" # Lighter grey for OS/User contrast
+base = "#222222"     # Main Background
+mantle = "#222222"
+crust = "#191919"
+
 [os]
 disabled = false
 style = "bg:surface0 fg:text"
@@ -92,6 +141,8 @@ CentOS = ""
 Debian = "󰣚"
 Redhat = "󱄛"
 RedHatEnterprise = "󱄛"
+CachyOS = "" # Or use " " or "󰣇 " (speed icon)
+# ... keep your other OS symbols ...
 
 [username]
 show_always = true
