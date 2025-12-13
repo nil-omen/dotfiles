@@ -7,6 +7,19 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "title_bar": {
+    "show_branch_icon": true
+  },
+  "tabs": {
+    "file_icons": true
+  },
+  "agent": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "claude-haiku-4.5"
+    },
+    "model_parameters": []
+  },
   "auto_update": false,
   "base_keymap": "VSCode",
   "icon_theme": "Material Icon Theme",
@@ -24,5 +37,9 @@
     "mode": "system",
     "light": "Monokai Nebula Light",
     "dark": "Snazzy Theme - blurred"
+  },
+  "features": {
+    "edit_prediction_provider": "copilot"
+    // "edit_prediction_provider": "zed"
   }
 }
