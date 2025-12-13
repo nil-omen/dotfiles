@@ -49,17 +49,96 @@ This repository includes several utility scripts to assist with system setup.
 
 ### Install Tools (CachyOS)
 
-This script automates the installation of my most frequently used tools on CachyOS.
+This script automates the installation of commonly used tools and development utilities on CachyOS. It provides an easy way to manage packages and includes post-installation configuration for Docker, Rust, and LocalSend.
+
+**Prerequisites:**
+
+The script requires `paru` (an AUR helper) to be installed:
+
+```shell
+sudo pacman -S paru
+```
+
+**Usage:**
 
 1.  **Make the script executable:**
     ```shell
     chmod +x scripts/install_tools(CachyOS).sh
     ```
 
-2.  **Run the script:**
+2.  **Review available packages:**
+    ```shell
+    ./scripts/install_tools(CachyOS).sh --list
+    ```
+
+3.  **Run the script:**
     ```shell
     ./scripts/install_tools(CachyOS).sh
     ```
+    
+    The script will:
+    - Display all packages to be installed (separated by source: repository and AUR)
+    - Ask for confirmation before proceeding
+    - Update your system
+    - Install all packages
+    - Configure Docker (add your user to the docker group)
+    - Configure Rust (install stable toolchain if needed)
+    - Configure firewall rules for LocalSend if applicable
+
+**Available Options:**
+
+```shell
+./scripts/install_tools(CachyOS).sh --help              # Show help message
+./scripts/install_tools(CachyOS).sh --list              # List packages without installing
+./scripts/install_tools(CachyOS).sh --skip-confirmation # Skip confirmation prompt
+```
+
+**Customization:**
+
+To add or remove packages, edit the configuration section at the top of the script:
+
+1.  **Repository Packages:** Edit the `REPO_PKGS` array for packages from official CachyOS/Arch repositories
+2.  **AUR Packages:** Edit the `AUR_PKGS` array for community-maintained packages from the Arch User Repository
+
+Example - adding a new repository package:
+
+```bash
+REPO_PKGS=(
+    git
+    github-cli
+    # ... existing packages ...
+    neovim        # Add new package here
+)
+```
+
+The arrays are clearly marked in the script and support comments for easy organization.
+
+**Default Installed Packages:**
+
+**Repository Packages:**
+- **Development:** git, github-cli, lazygit, stow
+- **Navigation:** zoxide
+- **Container:** docker
+- **Terminal & Shell:** starship
+- **Applications:** obsidian, vlc, qbittorrent
+- **Languages:** go, rustup
+- **Editors:** zed
+- **Utilities:** localsend, lazydocker
+
+**AUR Packages:**
+- microsoft-edge-stable-bin (proprietary web browser)
+
+**What the script does:**
+
+1.  Updates your system using `paru -Syu`
+2.  Installs repository packages from official CachyOS/Arch repositories
+3.  Installs AUR packages from the Arch User Repository
+4.  Configures installed tools:
+    - **Docker**: Enables the Docker service and adds your user to the docker group
+    - **Rust**: Installs the stable Rust toolchain via rustup
+    - **LocalSend**: Configures firewall rules (UFW or Firewalld) for port 53317
+
+**Note:** If you installed Docker, you may need to log out and back in for the group changes to take effect.
 
 ### Nerd Fonts Install
 
