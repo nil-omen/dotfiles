@@ -2,7 +2,7 @@ source /usr/share/cachyos-fish-config/cachyos-config.fish
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
-fastfetch
+# fastfetch
 set -g fish_greeting
 starship init fish | source
 # added path for go

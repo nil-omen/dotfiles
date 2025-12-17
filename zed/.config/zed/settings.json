@@ -15,8 +15,8 @@
   },
   "agent": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-haiku-4.5"
+      "provider": "google",
+      "model": "gemini-2.5-flash-lite"
     },
     "model_parameters": []
   },
@@ -36,8 +36,24 @@
   "theme": {
     "mode": "system",
     "light": "Monokai Nebula Light",
-    "dark": "Snazzy Theme - blurred"
+    "dark": "Monokai Nebula"
   },
+  // 00: Fully Transparent (Invisible)
+  // 80: ~50% Opacity
+  // BF: ~75% Opacity
+  // FF: Fully Opaque (Solid)
+  // "experimental.theme_overrides": {
+  //   "background.appearance": "blurred",
+  //   "background": "#000000bf",
+  //   "editor.background": "#000000bf",
+  //   "editor.gutter.background": "#000000bf",
+  //   "tab_bar.background": "#000000bf",
+  //   "terminal.background": "#000000bf",
+  //   "toolbar.background": "#000000bf",
+  //   "status_bar.background": "#000000bf",
+  //   "title_bar.background": "#000000bf",
+  //   "panel.background": "#000000bf"
+  // },
   "features": {
     "edit_prediction_provider": "copilot"
     // "edit_prediction_provider": "zed"

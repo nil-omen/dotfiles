@@ -52,9 +52,17 @@
     // "tags": []
   },
 
+  // Go tasks
   {
     "label": "go run file",
     "command": "go run $ZED_FILE",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false
+  },
+  {
+    "label": "go run package",
+    "command": "go run .",
+    "cwd": "$ZED_DIRNAME",
     "use_new_terminal": false,
     "allow_concurrent_runs": false
   }

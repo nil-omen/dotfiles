@@ -19,10 +19,17 @@
     }
   },
 
+  // Go Specific shortcuts
   {
     "context": "Workspace",
     "bindings": {
       "alt-r": ["task::Spawn", { "task_name": "go run file" }]
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "shift-alt-r": ["task::Spawn", { "task_name": "go run package" }]
     }
   },
 
@@ -30,6 +37,12 @@
     "context": "Editor",
     "bindings": {
       "ctrl-shift-v": "markdown::OpenPreviewToTheSide"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-e": "workspace::OpenInTerminal"
     }
   }
 ]
