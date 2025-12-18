@@ -63,17 +63,17 @@ sudo pacman -S paru
 
 1.  **Make the script executable:**
     ```shell
-    chmod +x scripts/install_tools(CachyOS).sh
+    chmod +x scripts/install_tools-CachyOS.sh
     ```
 
 2.  **Review available packages:**
     ```shell
-    ./scripts/install_tools(CachyOS).sh --list
+    ./scripts/install_tools-CachyOS.sh --list
     ```
 
 3.  **Run the script:**
     ```shell
-    ./scripts/install_tools(CachyOS).sh
+    ./scripts/install_tools-CachyOS.sh
     ```
     
     The script will:
@@ -88,9 +88,9 @@ sudo pacman -S paru
 **Available Options:**
 
 ```shell
-./scripts/install_tools(CachyOS).sh --help              # Show help message
-./scripts/install_tools(CachyOS).sh --list              # List packages without installing
-./scripts/install_tools(CachyOS).sh --skip-confirmation # Skip confirmation prompt
+./scripts/install_tools-CachyOS.sh --help              # Show help message
+./scripts/install_tools-CachyOS.sh --list              # List packages without installing
+./scripts/install_tools-CachyOS.sh --skip-confirmation # Skip confirmation prompt
 ```
 
 **Customization:**

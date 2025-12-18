@@ -30,7 +30,7 @@ print_warning() {
 # Display usage information
 show_usage() {
     cat << EOF
-Usage: ./install_tools(CachyOS).sh [OPTIONS]
+Usage: ./install_tools-CachyOS.sh [OPTIONS]
 
 OPTIONS:
     -h, --help              Show this help message
@@ -39,9 +39,9 @@ OPTIONS:
     --verify                Verify that all tools are properly installed
 
 EXAMPLES:
-    ./install_tools(CachyOS).sh
-    ./install_tools(CachyOS).sh --list
-    ./install_tools(CachyOS).sh --skip-confirmation
+    ./install_tools-CachyOS.sh
+    ./install_tools-CachyOS.sh --list
+    ./install_tools-CachyOS.sh --skip-confirmation
 
 EOF
 }
@@ -117,6 +117,9 @@ REPO_PKGS=(
 # Add or remove packages as needed
 AUR_PKGS=(
     microsoft-edge-stable-bin
+
+    # API testing tool
+    bruno-bin
 )
 
 # =============================================================================
