@@ -37,7 +37,7 @@ skip-levels = 1                # Skips the first level of indentation (cleaner l
 
 [editor.lsp]
 display-messages = true        # Displays LSP progress messages in the status bar
-display-inlay-hints = true     # Shows parameter names and types in the code (ghost text)
+display-inlay-hints = false     # Shows parameter names and types in the code (ghost text)
 
 # KEYBINDINGS
 # Making common tasks faster and more familiar
