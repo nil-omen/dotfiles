@@ -9,6 +9,8 @@ Welcome to my dotfiles repository! This repository stores my personal configurat
 - [Scripts](#scripts)
   - [Install Tools (CachyOS)](#install-tools-cachyos)
   - [Nerd Fonts Install](#nerd-fonts-install)
+- [Editor Configurations](#editor-configurations)
+  - [Helix](#helix)
 - [Directory Structure](#directory-structure)
 
 ## Introduction
@@ -39,7 +41,7 @@ This repository contains my personal configurations for various tools and applic
 
     You can also stow multiple directories:
     ```shell
-    stow alacritty fish git kitty starship vim zed
+    stow alacritty fish git helix kitty starship vim zed
     ```
     **Note:** Make sure to back up your existing dotfiles before stowing to avoid conflicts.
 
@@ -122,11 +124,21 @@ The arrays are clearly marked in the script and support comments for easy organi
 - **Terminal & Shell:** starship
 - **Applications:** obsidian, vlc, qbittorrent
 - **Languages:** go, rustup
-- **Editors:** zed
+- **Editors:** helix, zed
+- **Language Servers & Formatters:**
+  - `gopls` - Go language server (code completion, diagnostics)
+  - `go-tools` - Go utilities (includes `goimports` for auto import management)
+  - `rust-analyzer` - Rust language server with macro expansion and full IDE support
+  - `pyright` - Python language server (type checking, completion)
+  - `python-ruff` - Python fast formatter and linter
+  - `yaml-language-server` - YAML support (Kubernetes, Ansible, GitHub Actions)
+  - `bash-language-server` - Bash/Shell script support
+  - `taplo` - TOML language server (configuration files, Cargo.toml)
 - **Utilities:** localsend, lazydocker
 
 **AUR Packages:**
 - microsoft-edge-stable-bin (proprietary web browser)
+- bruno-bin (API testing tool)
 
 **What the script does:**
 
@@ -206,6 +218,117 @@ Install multiple fonts (e.g., Meslo, FiraCode, and JetBrainsMono):
 - After installation, restart your terminal or applications to see the newly installed fonts.
 - Each Nerd Font pack varies in size (typically 10-120 MB). Consider your bandwidth and storage when selecting multiple fonts.
 
+## Editor Configurations
+
+### Helix
+
+[Helix](https://helix-editor.com/) is a post-modern text editor written in Rust, combining the best of Vim and modern editor design. This repository includes comprehensive Helix configurations optimized for Go, Rust, Python, and DevOps workflows.
+
+**Prerequisites:**
+
+Helix requires language servers and formatters to provide intelligent code completion, linting, and formatting. On CachyOS, install these tools:
+
+```shell
+# Go development
+sudo pacman -S gopls go-tools
+
+# Rust development
+sudo pacman -S rust-analyzer
+
+# Python development
+sudo pacman -S pyright python-ruff
+
+# DevOps tools (YAML, Bash, TOML)
+sudo pacman -S yaml-language-server bash-language-server taplo-cli
+```
+
+**Installation:**
+
+1.  **Install Helix:**
+    ```shell
+    sudo pacman -S helix
+    ```
+
+2.  **Optionally, create a convenient alias in your Fish shell:**
+    Add this line to your `~/.config/fish/config.fish`:
+    ```fish
+    abbr --add hx helix
+    ```
+    This lets you type `hx` instead of `helix` to open the editor.
+
+3.  **Install the dotfiles configuration:**
+    ```shell
+    stow helix
+    ```
+
+**Configuration Files:**
+
+The Helix configuration includes:
+
+-   **`config.toml`**: Main editor settings including:
+    - Relative line numbers for easy Vim-style jumping
+    - Custom keybindings (e.g., `Ctrl+s` to save, `{}` to navigate buffers)
+    - LSP and inlay hints configuration
+    - Soft wrapping and visual enhancements
+    - File explorer integration with `Ctrl+e`
+
+-   **`languages.toml`**: Language-specific configurations:
+    - **Go**: Uses `goimports` for automatic import management and formatting
+    - **Rust**: Configured with `rust-analyzer` for full IDE-like support
+    - **Python**: Uses `ruff` for fast formatting and linting
+    - **YAML**: Auto-formatting for Kubernetes and Ansible configurations
+    - **BASH**: Shell script formatting and linting
+    - **TOML**: Configuration file support
+
+**Language Server & Formatter Support:**
+
+The following table shows which LSP tools support which languages and file types:
+
+| Language | LSP Tool | Package | Features |
+|----------|----------|---------|----------|
+| **Go** | `gopls` | `gopls` | Code completion, diagnostics, go-to-definition |
+| **Go** | `goimports` | `go-tools` | Auto-format, automatic import management |
+| **Rust** | `rust-analyzer` | `rust-analyzer` | IDE-like support, macro expansion, inlay hints |
+| **Python** | `pyright` | `pyright` | Type checking, code completion, diagnostics |
+| **Python** | `ruff` | `python-ruff` | Fast formatting and linting |
+| **YAML** | `yaml-language-server` | `yaml-language-server` | Kubernetes, Ansible, GitHub Actions support |
+| **BASH/Shell** | `bash-language-server` | `bash-language-server` | Script support, variable completion |
+| **TOML** | `taplo` | `taplo` | Configuration files, Cargo.toml support |
+
+**Verification:**
+
+After installation, verify that all language servers are available:
+
+```shell
+hx --health
+```
+
+You should see green `OK` indicators for all installed tools. Look for:
+- `go` → gopls ✓
+- `rust` → rust-analyzer ✓
+- `python` → pyright ✓
+- `yaml` → yaml-language-server ✓
+- `bash` → bash-language-server ✓
+- `toml` → taplo ✓
+
+**Key Features:**
+
+-   **Auto-formatting on save** for supported languages
+-   **Semantic tokens** for improved syntax highlighting
+-   **Inlay hints** for parameter names and types
+-   **Multi-cursor support** with powerful selection tools
+-   **Modal editing** with Vim-inspired keybindings
+-   **Built-in file explorer** and LSP integration
+
+**Quick Tips:**
+
+-   Use `:` to enter command mode (like Vim)
+-   Use `/` to search, `n` to find next occurrence
+-   Use `Ctrl+e` to toggle the file explorer
+-   Use `{}` to jump between open buffers (files)
+-   Use `Ctrl+s` to save (custom keybinding)
+-   Type `:hx --health` inside the editor to check language server status
+
 ## Directory Structure
 
 Here's an overview of the directories within this repository and what they contain:
@@ -213,6 +336,7 @@ Here's an overview of the directories within this repository and what they conta
 -   **`alacritty/`**: Configuration files for the [Alacritty](https://github.com/alacritty/alacritty) terminal emulator.
 -   **`fish/`**: Configuration files for the [Fish shell](https://fishshell.com/).
 -   **`git/`**: Global Git configurations (e.g., `~/.gitconfig`).
+-   **`helix/`**: Configuration files for the [Helix](https://helix-editor.com/) editor, including language server and formatter configurations.
 -   **`kitty/`**: Configuration files for the [Kitty](https://sw.kovidgoyal.net/kitty/) terminal emulator.
 -   **`scripts/`**: Various utility scripts for system setup and maintenance.
 -   **`starship/`**: Configuration for the [Starship](https://starship.rs/) prompt.

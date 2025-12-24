@@ -15,8 +15,8 @@
   },
   "agent": {
     "default_model": {
-      "provider": "google",
-      "model": "gemini-2.5-flash"
+      "provider": "copilot_chat",
+      "model": "claude-haiku-4.5"
     },
     "model_parameters": []
   },
@@ -55,7 +55,7 @@
   //   "panel.background": "#000000bf"
   // },
   "features": {
-    "edit_prediction_provider": "copilot"
+    "edit_prediction_provider": "zed"
     // "edit_prediction_provider": "zed"
   }
 }

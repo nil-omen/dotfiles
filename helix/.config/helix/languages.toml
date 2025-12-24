@@ -1,0 +1,53 @@
+####################
+# GO CONFIGURATION #
+####################
+[[language]]
+name = "go"
+auto-format = true
+# Use goimports to format AND automatically add/remove imports on save
+[language.formatter]
+command = "goimports"
+
+[language.config.gopls]
+# specific gopls settings can go here if needed
+"ui.semanticTokens" = true
+
+######################
+# RUST CONFIGURATION #
+######################
+# Rust support is built-in, but we enforce it here for clarity
+[[language]]
+name = "rust"
+auto-format = true
+
+[language.config.rust-analyzer.cargo]
+loadOutDirsFromCheck = true # Helps with macro expansion in build scripts
+
+########################
+# PYTHON CONFIGURATION #
+########################
+[[language]]
+name = "python"
+# Using 'ruff' is highly recommended for speed in DevOps scripts
+[language.formatter]
+command = "ruff"
+args = ["format", "-"]
+
+########################
+# DEVOPS / CONFIG FILES #
+########################
+
+# YAML (Kubernetes, Ansible, GitHub Actions)
+[[language]]
+name = "yaml"
+auto-format = true
+
+# TOML (Config files, Rust Cargo.toml)
+[[language]]
+name = "toml"
+auto-format = true
+
+# BASH / SHELL (Scripts)
+[[language]]
+name = "bash"
+auto-format = true

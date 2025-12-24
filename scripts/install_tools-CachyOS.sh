@@ -91,26 +91,37 @@ REPO_PKGS=(
     zoxide
 
     # Container & System
-    docker
+    # docker
+    # lazydocker
 
     # Terminal & Shell
     starship
 
     # Applications
-    obsidian
-    vlc
-    qbittorrent
+    # obsidian
+    # vlc
+    # qbittorrent
 
     # Languages & Toolchains
     go
-    rustup
+    # rustup
 
     # Editors
+    helix
     zed
+
+    # Language Servers & Formatters (for Helix)
+    # gopls              # Go language server and intelligence
+    # go-tools           # Go utilities (includes goimports for auto-formatting)
+    # rust-analyzer      # Rust language server with macro expansion support
+    # pyright            # Python language server (type checking & completion)
+    # python-ruff        # Python fast formatter and linter
+    # yaml-language-server # YAML support (Kubernetes, Ansible, GitHub Actions)
+    # bash-language-server # Bash/Shell script support
+    # taplo              # TOML language server (configuration files)
 
     # Utilities
     localsend
-    lazydocker
 )
 
 # AUR Packages (from Arch User Repository)
