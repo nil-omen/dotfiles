@@ -57,3 +57,18 @@ auto-format = true
 [[language]]
 name = "bash"
 auto-format = true
+
+###################
+# NIX CONFIGURATION
+###################
+[[language]]
+name = "nix"
+auto-format = true
+formatter = { command = "nixfmt" }
+
+[language-server.nil]
+command = "nil"
+
+# Optional: Configuration for NIL
+[language-server.nil.config.nil]
+formatting = { command = ["nixfmt"] }

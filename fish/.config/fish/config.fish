@@ -129,4 +129,7 @@ if status is-interactive
     zoxide init fish | source
     starship init fish | source
 
+    # Set editor and visual
+    set -gx EDITOR hx
+    set -gx VISUAL hx
 end
