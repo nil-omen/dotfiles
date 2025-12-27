@@ -8,20 +8,26 @@ auto-format = true
 [language.formatter]
 command = "goimports"
 
-[language.config.gopls]
-# specific gopls settings can go here if needed
+# FIX: Move gopls config to a language-server block
+[language-server.gopls]
+command = "gopls"
+
+[language-server.gopls.config]
 "ui.semanticTokens" = true
 
 ######################
 # RUST CONFIGURATION #
 ######################
-# Rust support is built-in, but we enforce it here for clarity
 [[language]]
 name = "rust"
 auto-format = true
 
-[language.config.rust-analyzer.cargo]
-loadOutDirsFromCheck = true # Helps with macro expansion in build scripts
+# FIX: Move rust-analyzer config to a language-server block
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+
+[language-server.rust-analyzer.config.cargo]
+loadOutDirsFromCheck = true
 
 ########################
 # PYTHON CONFIGURATION #
