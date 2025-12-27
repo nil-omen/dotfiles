@@ -1,9 +1,9 @@
 [credential "https://github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/run/current-system/sw/bin/gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/run/current-system/sw/bin/gh auth git-credential
 [user]
 	name = King
 	email = 24613526+R-D-King@users.noreply.github.com
