@@ -12,7 +12,7 @@
       # gnome-photos
       gnome-tour
       # gedit # Text Editor (You use Helix/Zed)
-      cheese # Webcam
+      # cheese # Webcam
       # gnome-music
       # gnome-terminal # You use Alacritty
       epiphany # Web Browser
@@ -55,6 +55,18 @@
     # gnome-disk-utility
     # seahorse # Keyring
     # sushi        # File previewer (optional)
+
+    # The new GNOME Camera app
+    snapshot
+
+    # Required for the camera to actually save/encode pictures
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly # (Optional, but good for compatibility)
+    gst_all_1.gst-libav # (Often needed for advanced video)
+
   ];
 
   # Basic X11 Keymap (Fallback)

@@ -1,0 +1,57 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+{
+  # --- Hardware Support ---
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true; # For 32-bit games
+  };
+
+  # --- NVIDIA Configuration ---
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.nvidia = {
+    # Modesetting is required.
+    modesetting.enable = true;
+
+    # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
+    # Enable this if you have weird graphical corruption on resume.
+    powerManagement.enable = false;
+
+    # Fine-grained power management. Turns off GPU when not in use.
+    # PROBABLY WON'T WORK on your Quadro M2200 (Maxwell).
+    # Only works on newer Turing (RTX 20 series) and up.
+    powerManagement.finegrained = false;
+
+    # Do not use the open source kernel modules (only for Turing+).
+    # Your M2200 must use the proprietary closed-source modules.
+    open = false;
+
+    # Enable the Nvidia settings menu (accessible via `nvidia-settings`).
+    nvidiaSettings = true;
+
+    # Select the production driver (usually the best bet).
+    # If this fails, change it to `pkgs.linuxPackages.nvidiaPackages.legacy_470`
+    package = config.boot.kernelPackages.nvidiaPackages.production;
+
+    # --- PRIME Offload Configuration ---
+    # This allows you to use Intel for desktop and Nvidia for games.
+    prime = {
+      offload = {
+        enable = true;
+        enableOffloadCmd = true;
+      };
+
+      # FIX ME: Put your Bus IDs here!
+      # Format is usually PCI:bus:device:function
+      # If lspci says "00:02.0", that becomes "PCI:0:2:0"
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+  };
+}

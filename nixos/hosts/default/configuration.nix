@@ -4,7 +4,11 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/system/gnome.nix
+    ../../modules/system/dell-precision-7520.nix
   ];
+
+  # Latest Linux Kernel Packages
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
@@ -77,6 +81,11 @@
   # Fonts
   fonts.packages = with pkgs; [
     nerd-fonts.meslo-lg
+  ];
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
   ];
 
   system.stateVersion = "25.11";
