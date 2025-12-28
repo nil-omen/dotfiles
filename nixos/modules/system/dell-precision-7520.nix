@@ -48,10 +48,13 @@
       };
 
       # FIX ME: Put your Bus IDs here!
+      # USE THIS COMMAND TO FIND YOUR BUS IDS: `nix run nixpkgs#pciutils -- -k | grep -EA2 'VGA|3D'`
       # Format is usually PCI:bus:device:function
       # If lspci says "00:02.0", that becomes "PCI:0:2:0"
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
+      #
+      # Reboot after building. To test if it works, run: `nvidia-smi`. If you see your GPU listed, you are golden.
     };
   };
 }

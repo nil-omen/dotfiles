@@ -142,7 +142,7 @@ Debian = "󰣚"
 Redhat = "󱄛"
 RedHatEnterprise = "󱄛"
 CachyOS = "" # Or use " " or "󰣇 " (speed icon)
-# ... keep your other OS symbols ...
+NixOS = ""
 
 [username]
 show_always = true
