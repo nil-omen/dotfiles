@@ -1,10 +1,16 @@
 # My Dotfiles
 
-Welcome to my dotfiles repository! This repository stores my personal configuration files (dotfiles) and scripts, designed to streamline the setup of a new system, particularly CachyOS.
+Welcome to my dotfiles repository! This repository stores my personal configuration files (dotfiles) and scripts, designed to streamline the setup of a new system. This repository supports both traditional stow-based setups and NixOS declarative configuration.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [NixOS Configuration](#nixos-configuration)
+  - [Quick Start](#quick-start)
+  - [Configuration Files](#configuration-files)
+  - [Making Changes](#making-changes)
+  - [Applying Configuration](#applying-configuration)
+  - [Troubleshooting](#troubleshooting)
 - [Installation with GNU Stow](#installation-with-gnu-stow)
 - [Scripts](#scripts)
   - [Install Tools (CachyOS)](#install-tools-cachyos)
@@ -15,11 +21,259 @@ Welcome to my dotfiles repository! This repository stores my personal configurat
 
 ## Introduction
 
-This repository contains my personal configurations for various tools and applications, aimed at providing a consistent and efficient development environment across different machines. By using [GNU Stow](https://www.gnu.org/software/stow/), you can easily symlink these configuration files to your home directory without manually copying them.
+This repository contains my personal configurations for various tools and applications, aimed at providing a consistent and efficient development environment across different machines. 
+
+For **NixOS systems**, this repository includes declarative configuration using Nix Flakes, which manages the entire system state including packages, services, and user configurations. For **traditional Linux systems** (like CachyOS or Ubuntu), you can use [GNU Stow](https://www.gnu.org/software/stow/) to manage configuration files.
+
+## NixOS Configuration
+
+This repository includes a complete NixOS declarative configuration using Nix Flakes. This approach allows you to reproducibly build your entire system state from a single source of truth.
+
+### Quick Start
+
+**Prerequisites:**
+- NixOS installed on your system
+- Git installed
+
+**Installation:**
+
+1. **Clone the repository to your home directory:**
+   ```shell
+   git clone https://github.com/your-username/dotfiles.git ~/dotfiles
+   ```
+
+2. **Navigate to the dotfiles directory:**
+   ```shell
+   cd ~/dotfiles
+   ```
+
+3. **Apply the NixOS configuration:**
+   ```shell
+   sudo nixos-rebuild switch --flake .#nixos
+   ```
+
+   This will:
+   - Evaluate the Nix flake configuration
+   - Download and build all packages
+   - Activate the new system configuration
+   - Apply Home Manager settings for the `king` user
+
+4. **Verify installation:**
+   ```shell
+   # Check system generation
+   sudo nixos-rebuild list-generations
+   
+   # Verify Home Manager is active
+   home-manager news
+   ```
+
+⚠️ **IMPORTANT: Do NOT use GNU Stow on NixOS** ⚠️
+
+On NixOS systems, **DO NOT** run `stow` commands to link your dotfiles. NixOS already manages all configuration file symlinks through Home Manager in `home.nix`. Using stow will create conflicting symlink loops and cause system problems.
+
+Home Manager automatically creates the necessary symlinks from your dotfiles repository. Just edit the configuration files as described in the [Making Changes](#making-changes) section and run `nixos-rebuild switch`.
+
+### Configuration Files
+
+The NixOS configuration is located in the `nixos/` directory:
+
+```
+nixos/
+├── flake.nix                           # Flake configuration (entry point)
+└── hosts/
+    └── default/
+        ├── configuration.nix           # System-level configuration
+        ├── hardware-configuration.nix  # Hardware-specific settings (auto-generated)
+        └── home.nix                    # Home Manager user configuration
+```
+
+**File Descriptions:**
+
+- **`flake.nix`**: The main Nix Flake configuration. Defines inputs (nixpkgs, home-manager) and outputs (nixosConfigurations). This is the entry point when using `nixos-rebuild`.
+
+- **`configuration.nix`**: System-wide settings including:
+  - Bootloader and EFI configuration
+  - Networking (hostname, firewall, NetworkManager)
+  - Time zone (Africa/Cairo) and locale settings
+  - Desktop environment (GNOME with X11)
+  - Sound system (PipeWire)
+  - Printing support
+  - System services (MySQL/MariaDB, PipeWire)
+  - User account setup (king user with fish shell)
+  - Fonts and system-wide packages
+
+- **`home.nix`**: User-level configuration (Home Manager) for the `king` user:
+  - Package management (editors, terminal tools, development tools)
+  - Shell configuration (Fish, Starship prompt)
+  - Dotfiles linking (symlinks to this repository's configs)
+  - Application configurations (Git, editors, etc.)
+
+- **`hardware-configuration.nix`**: Auto-generated file containing hardware-specific settings. **Do not edit this file manually** — it's generated by `nixos-generate-config`. If you need to update it:
+  ```shell
+  sudo nixos-generate-config --show-hardware-config > ~/dotfiles/nixos/hosts/default/hardware-configuration.nix
+  ```
+
+### Making Changes
+
+#### System Configuration Changes
+
+To modify system-level settings (bootloader, networking, services, etc.):
+
+1. **Edit `configuration.nix`:**
+   ```shell
+   vim ~/dotfiles/nixos/hosts/default/configuration.nix
+   ```
+
+2. **Apply the changes:**
+   ```shell
+   sudo nixos-rebuild switch --flake ~/dotfiles#nixos
+   ```
+
+3. **Test before committing:**
+   ```shell
+   # See what will change without applying
+   sudo nixos-rebuild dry-build --flake ~/dotfiles#nixos
+   
+   # Or boot into a test environment
+   sudo nixos-rebuild test --flake ~/dotfiles#nixos
+   ```
+
+#### User Configuration Changes (Home Manager)
+
+To modify user packages, dotfile links, or user-level settings:
+
+1. **Edit `home.nix`:**
+   ```shell
+   vim ~/dotfiles/nixos/hosts/default/home.nix
+   ```
+
+2. **Apply the changes:**
+   ```shell
+   home-manager switch --flake ~/dotfiles#
+   ```
+
+   Or apply both system and user changes together:
+   ```shell
+   sudo nixos-rebuild switch --flake ~/dotfiles#nixos
+   ```
+
+#### Adding/Removing Packages
+
+Packages are defined in `home.nix` in the `home.packages` section:
+
+```nix
+home.packages = with pkgs; [
+  helix      # Add new package here
+  vim
+  # ... other packages
+];
+```
+
+To find package names:
+```shell
+# Search nixpkgs
+nix search nixpkgs PACKAGE_NAME
+
+# Example: find Go-related packages
+nix search nixpkgs go
+```
+
+#### Managing Dotfiles Links
+
+The `home.nix` file uses symlinks to link configuration directories from this repository into the home directory. To add a new dotfiles link:
+
+```nix
+# Example: Link a new config directory
+xdg.configFile."APPNAME".source =
+  config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/APPNAME/.config/APPNAME";
+
+# Or link a single file to home directory
+home.file.".FILENAME".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/app/.FILENAME";
+```
+
+This allows you to edit configurations in the dotfiles repository and have them automatically reflected in your home directory.
+
+### Applying Configuration
+
+#### Full System Rebuild
+
+Apply all changes (system + user):
+```shell
+sudo nixos-rebuild switch --flake ~/dotfiles#nixos
+```
+
+#### Test Without Applying
+
+Preview changes without making them permanent:
+```shell
+sudo nixos-rebuild test --flake ~/dotfiles#nixos
+```
+
+#### Dry Run (Show What Would Change)
+
+```shell
+sudo nixos-rebuild dry-build --flake ~/dotfiles#nixos
+```
+
+#### Rollback to Previous Generation
+
+```shell
+# List previous generations
+sudo nixos-rebuild list-generations
+
+# Boot into a previous generation (at startup)
+sudo nixos-rebuild switch --flake ~/dotfiles#nixos --profile-name <generation-number>
+
+# Or use this to rollback to the previous generation
+sudo nixos-rebuild switch --flake ~/dotfiles#nixos -p /nix/var/nix/profiles/system-<N>-link
+```
+
+#### Update Flake Dependencies
+
+To update nixpkgs and home-manager to their latest versions:
+```shell
+nix flake update --flake ~/dotfiles
+sudo nixos-rebuild switch --flake ~/dotfiles#nixos
+```
+
+### Troubleshooting
+
+**Issue: "Cannot find flake" error**
+```shell
+# Ensure you're in the correct directory
+cd ~/dotfiles
+# Try with explicit path
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+**Issue: Home Manager changes not applied**
+```shell
+# Run home-manager explicitly
+home-manager switch --flake ~/dotfiles#
+```
+
+**Issue: Package not found**
+```shell
+# Search for the correct package name
+nix search nixpkgs PACKAGE_NAME
+
+# Update flake to latest versions
+nix flake update
+```
+
+**Issue: Want to start fresh**
+```shell
+# Remove flake lock file and rebuild (updates all dependencies)
+rm ~/dotfiles/flake.lock
+nix flake update --flake ~/dotfiles
+sudo nixos-rebuild switch --flake ~/dotfiles#nixos
+```
 
 ## Installation with GNU Stow
 
-[GNU Stow](https://www.gnu.org/software/stow/) is a symlink farm manager that helps manage symbolic links to configuration files.
+⚠️ **Note: GNU Stow is for non-NixOS systems only. If you are using NixOS, see the [NixOS Configuration](#nixos-configuration) section instead.**
+
+[GNU Stow](https://www.gnu.org/software/stow/) is a symlink farm manager that helps manage symbolic links to configuration files. This method is suitable for traditional Linux distributions like CachyOS, Arch, Ubuntu, Debian, etc.
 
 1.  **Clone the repository:**
     ```shell
@@ -338,6 +592,7 @@ Here's an overview of the directories within this repository and what they conta
 -   **`git/`**: Global Git configurations (e.g., `~/.gitconfig`).
 -   **`helix/`**: Configuration files for the [Helix](https://helix-editor.com/) editor, including language server and formatter configurations.
 -   **`kitty/`**: Configuration files for the [Kitty](https://sw.kovidgoyal.net/kitty/) terminal emulator.
+-   **`nixos/`**: NixOS declarative configuration using Nix Flakes. Includes system-level configuration, hardware settings, and Home Manager user configuration.
 -   **`scripts/`**: Various utility scripts for system setup and maintenance.
 -   **`starship/`**: Configuration for the [Starship](https://starship.rs/) prompt.
 -   **`vim/`**: Configuration files for [Vim](https://www.vim.org/).

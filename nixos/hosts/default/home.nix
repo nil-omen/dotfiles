@@ -18,7 +18,7 @@ in
     vim # Added per request
 
     # -- Nix support --
-    nil
+    nixd
     nixfmt-rfc-style
 
     # -- Terminal Tools --
@@ -60,17 +60,36 @@ in
   # --- 2. Shell & Prompt ---
   programs.starship = {
     enable = true;
-    settings = pkgs.lib.importTOML "${dotfilesDir}/starship/.config/starship.toml";
   };
+  xdg.configFile."starship.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/starship/.config/starship.toml";
 
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      set -g fish_greeting ""       # Disable greeting
       source ${dotfilesDir}/fish/.config/fish/config.fish
     '';
   };
 
   # --- 3. Linking Dotfiles (The "Whole Folder" Strategy) ---
+
+  # > .config/fish/functions (Whole folder)
+  xdg.configFile."fish/functions".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/functions";
+
+  # > .config/fish/conf.d (Individual files to avoid breaking Home Manager)
+  xdg.configFile."fish/conf.d/done.fish".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/conf.d/done.fish";
+
+  # 3. Fish Variables (CRITICAL: Restores abbreviations and universal vars)
+  # This allows fish to read/write variables directly to your dotfiles repo
+  xdg.configFile."fish/fish_variables".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/fish_variables";
+
+  # 4. Extra Configs (If your config.fish sources this, it needs to exist!)
+  xdg.configFile."fish/cachyos-config.fish".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/cachyos-config.fish";
 
   # > .config/alacritty (Includes all themes and alacritty.toml)
   xdg.configFile."alacritty".source =
@@ -86,14 +105,6 @@ in
   # > .config/kitty (Just in case)
   xdg.configFile."kitty".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/kitty/.config/kitty";
-
-  # > .config/fish/functions (Whole folder)
-  xdg.configFile."fish/functions".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/functions";
-
-  # > .config/fish/conf.d (Individual files to avoid breaking Home Manager)
-  xdg.configFile."fish/conf.d/done.fish".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/conf.d/done.fish";
 
   # --- 4. Home Directory Files ---
 

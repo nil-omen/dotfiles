@@ -8,35 +8,35 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "title_bar": {
-    "show_branch_icon": true
+    "show_branch_icon": true,
   },
   "tabs": {
-    "file_icons": true
+    "file_icons": true,
   },
   "agent": {
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-haiku-4.5"
+      "model": "claude-haiku-4.5",
     },
-    "model_parameters": []
+    "model_parameters": [],
   },
   "auto_update": false,
   "base_keymap": "VSCode",
   "icon_theme": "Material Icon Theme",
   "buffer_font_size": 14.0,
   "indent_guides": {
-    "background_coloring": "indent_aware"
+    "background_coloring": "indent_aware",
   },
   "buffer_font_family": "MesloLGMDZ Nerd Font Mono",
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "ui_font_size": 16.0,
   "theme": {
     "mode": "system",
     "light": "Monokai Nebula Light",
-    "dark": "Monokai Nebula"
+    "dark": "Monokai Nebula",
   },
   // 00: Fully Transparent (Invisible)
   // 80: ~50% Opacity
@@ -55,7 +55,12 @@
   //   "panel.background": "#000000bf"
   // },
   "features": {
-    "edit_prediction_provider": "zed"
+    "edit_prediction_provider": "zed",
     // "edit_prediction_provider": "zed"
-  }
+  },
+  "languages": {
+    "Nix": {
+      "language_servers": ["nixd", "!nil"],
+    },
+  },
 }

@@ -28,6 +28,8 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.king = import ./hosts/default/home.nix;
+              # "If you find a file blocking you, rename it to .backup and keep going."
+              home-manager.backupFileExtension = "backup";
             }
           ];
         };
