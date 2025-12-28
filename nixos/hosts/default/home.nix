@@ -5,6 +5,11 @@ let
   dotfilesDir = "${config.home.homeDirectory}/dotfiles";
 in
 {
+
+  imports = [
+    ../../modules/home/gnome.nix
+  ];
+
   home.username = "king";
   home.homeDirectory = "/home/king";
 
@@ -15,7 +20,7 @@ in
     # -- Editors --
     helix
     zed-editor
-    vim # Added per request
+    # vim # Added per request
 
     # -- Nix support --
     nixd
@@ -23,7 +28,7 @@ in
 
     # -- Terminal Tools --
     alacritty
-    kitty # Added per request
+    # kitty # Added per request
     zoxide
     eza
     fzf
@@ -40,7 +45,6 @@ in
     microsoft-edge
 
     # -- Utilities --
-    gnome-tweaks
     wl-clipboard
     localsend
     bruno
