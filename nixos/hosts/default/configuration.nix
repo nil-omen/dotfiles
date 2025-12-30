@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  pkgs-stable,
+  ...
+}:
 
 {
   imports = [
@@ -86,6 +91,37 @@
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
+  ];
+
+  # System Packages
+  # By default, packages come from nixos-unstable (latest, frequent updates)
+  # To use a stable package instead, use pkgs-stable:
+  #
+  # Example: Use stable PostgreSQL instead of unstable
+  # (pkgs-stable.postgresql)
+  #
+  # Example: Use stable Nginx instead of unstable
+  # (pkgs-stable.nginx)
+  #
+  # Stable packages are tested and more reliable, recommended for system services
+  environment.systemPackages = with pkgs; [
+    btop
+  ];
+
+  # Nix LD for dynamically linked binaries (e.g., Zed, VS Code, other generic Linux apps)
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    openssl
+    glib
+    libxcb
+    zlib
+    # Add more as needed for other apps:
+    # libxkbcommon    # Keyboard handling
+    # libwayland      # Wayland display protocol
+    # xorg.libX11     # X11 core library
+    # libGL           # OpenGL graphics
+    # libudev         # Device management
   ];
 
   system.stateVersion = "25.11";

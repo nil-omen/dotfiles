@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  pkgs-stable,
+  ...
+}:
 
 let
   # Define the path to your dotfiles repo
@@ -54,6 +59,18 @@ in
     gopls
     delve
     gotools
+
+    # -- Using Stable Packages --
+    # By default, packages come from nixos-unstable (latest)
+    # To use a stable package instead, use pkgs-stable:
+    #
+    # Example: Use stable Firefox instead of unstable
+    # (pkgs-stable.firefox)
+    #
+    # Example: Use stable Rust instead of unstable
+    # (pkgs-stable.rustup)
+    #
+    # Stable packages are tested and more reliable, but less frequently updated
   ];
 
   # --- 1. Git Setup ---

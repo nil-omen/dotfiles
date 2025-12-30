@@ -1,599 +1,169 @@
 # My Dotfiles
 
-Welcome to my dotfiles repository! This repository stores my personal configuration files (dotfiles) and scripts, designed to streamline the setup of a new system. This repository supports both traditional stow-based setups and NixOS declarative configuration.
+Welcome to my dotfiles repository! This repository contains personal configuration files and scripts for setting up a development environment on NixOS or traditional Linux distributions.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [NixOS Configuration](#nixos-configuration)
-  - [Quick Start](#quick-start)
-  - [Configuration Files](#configuration-files)
-  - [Making Changes](#making-changes)
-  - [Applying Configuration](#applying-configuration)
-  - [Troubleshooting](#troubleshooting)
-- [Installation with GNU Stow](#installation-with-gnu-stow)
+- [NixOS Setup](#nixos-setup)
+- [Traditional Linux Setup (GNU Stow)](#traditional-linux-setup-gnu-stow)
 - [Scripts](#scripts)
-  - [Install Tools (CachyOS)](#install-tools-cachyos)
-  - [Nerd Fonts Install](#nerd-fonts-install)
-- [Editor Configurations](#editor-configurations)
-  - [Helix](#helix)
 - [Directory Structure](#directory-structure)
 
 ## Introduction
 
-This repository contains my personal configurations for various tools and applications, aimed at providing a consistent and efficient development environment across different machines. 
+This repository provides configuration for:
+- **NixOS**: Declarative system configuration using Nix Flakes
+- **Traditional Linux** (CachyOS, Arch, Ubuntu, Debian, etc.): Configuration management via GNU Stow
 
-For **NixOS systems**, this repository includes declarative configuration using Nix Flakes, which manages the entire system state including packages, services, and user configurations. For **traditional Linux systems** (like CachyOS or Ubuntu), you can use [GNU Stow](https://www.gnu.org/software/stow/) to manage configuration files.
+Choose the setup method that matches your system.
 
-## NixOS Configuration
+## NixOS Setup
 
-This repository includes a complete NixOS declarative configuration using Nix Flakes. This approach allows you to reproducibly build your entire system state from a single source of truth.
+If you're using **NixOS**, see the comprehensive guide in [`nixos/README.md`](nixos/README.md).
 
-### Quick Start
-
-**Prerequisites:**
-- NixOS installed on your system
-- Git installed
-
-**Installation:**
-
-1. **Clone the repository to your home directory:**
-   ```shell
-   git clone https://github.com/your-username/dotfiles.git ~/dotfiles
-   ```
-
-2. **Navigate to the dotfiles directory:**
-   ```shell
-   cd ~/dotfiles
-   ```
-
-3. **Apply the NixOS configuration:**
-   ```shell
-   sudo nixos-rebuild switch --flake .#nixos
-   ```
-
-   This will:
-   - Evaluate the Nix flake configuration
-   - Download and build all packages
-   - Activate the new system configuration
-   - Apply Home Manager settings for the `king` user
-
-4. **Verify installation:**
-   ```shell
-   # Check system generation
-   sudo nixos-rebuild list-generations
-   
-   # Verify Home Manager is active
-   home-manager news
-   ```
-
-⚠️ **IMPORTANT: Do NOT use GNU Stow on NixOS** ⚠️
-
-On NixOS systems, **DO NOT** run `stow` commands to link your dotfiles. NixOS already manages all configuration file symlinks through Home Manager in `home.nix`. Using stow will create conflicting symlink loops and cause system problems.
-
-Home Manager automatically creates the necessary symlinks from your dotfiles repository. Just edit the configuration files as described in the [Making Changes](#making-changes) section and run `nixos-rebuild switch`.
-
-### Configuration Files
-
-The NixOS configuration is located in the `nixos/` directory:
-
-```
-nixos/
-├── flake.nix                           # Flake configuration (entry point)
-└── hosts/
-    └── default/
-        ├── configuration.nix           # System-level configuration
-        ├── hardware-configuration.nix  # Hardware-specific settings (auto-generated)
-        └── home.nix                    # Home Manager user configuration
-```
-
-**File Descriptions:**
-
-- **`flake.nix`**: The main Nix Flake configuration. Defines inputs (nixpkgs, home-manager) and outputs (nixosConfigurations). This is the entry point when using `nixos-rebuild`.
-
-- **`configuration.nix`**: System-wide settings including:
-  - Bootloader and EFI configuration
-  - Networking (hostname, firewall, NetworkManager)
-  - Time zone (Africa/Cairo) and locale settings
-  - Desktop environment (GNOME with X11)
-  - Sound system (PipeWire)
-  - Printing support
-  - System services (MySQL/MariaDB, PipeWire)
-  - User account setup (king user with fish shell)
-  - Fonts and system-wide packages
-
-- **`home.nix`**: User-level configuration (Home Manager) for the `king` user:
-  - Package management (editors, terminal tools, development tools)
-  - Shell configuration (Fish, Starship prompt)
-  - Dotfiles linking (symlinks to this repository's configs)
-  - Application configurations (Git, editors, etc.)
-
-- **`hardware-configuration.nix`**: Auto-generated file containing hardware-specific settings. **Do not edit this file manually** — it's generated by `nixos-generate-config`. If you need to update it:
-  ```shell
-  sudo nixos-generate-config --show-hardware-config > ~/dotfiles/nixos/hosts/default/hardware-configuration.nix
-  ```
-
-### Making Changes
-
-#### System Configuration Changes
-
-To modify system-level settings (bootloader, networking, services, etc.):
-
-1. **Edit `configuration.nix`:**
-   ```shell
-   vim ~/dotfiles/nixos/hosts/default/configuration.nix
-   ```
-
-2. **Apply the changes:**
-   ```shell
-   sudo nixos-rebuild switch --flake ~/dotfiles#nixos
-   ```
-
-3. **Test before committing:**
-   ```shell
-   # See what will change without applying
-   sudo nixos-rebuild dry-build --flake ~/dotfiles#nixos
-   
-   # Or boot into a test environment
-   sudo nixos-rebuild test --flake ~/dotfiles#nixos
-   ```
-
-#### User Configuration Changes (Home Manager)
-
-To modify user packages, dotfile links, or user-level settings:
-
-1. **Edit `home.nix`:**
-   ```shell
-   vim ~/dotfiles/nixos/hosts/default/home.nix
-   ```
-
-2. **Apply the changes:**
-   ```shell
-   home-manager switch --flake ~/dotfiles#
-   ```
-
-   Or apply both system and user changes together:
-   ```shell
-   sudo nixos-rebuild switch --flake ~/dotfiles#nixos
-   ```
-
-#### Adding/Removing Packages
-
-Packages are defined in `home.nix` in the `home.packages` section:
-
-```nix
-home.packages = with pkgs; [
-  helix      # Add new package here
-  vim
-  # ... other packages
-];
-```
-
-To find package names:
+**Quick start:**
 ```shell
-# Search nixpkgs
-nix search nixpkgs PACKAGE_NAME
-
-# Example: find Go-related packages
-nix search nixpkgs go
-```
-
-#### Managing Dotfiles Links
-
-The `home.nix` file uses symlinks to link configuration directories from this repository into the home directory. To add a new dotfiles link:
-
-```nix
-# Example: Link a new config directory
-xdg.configFile."APPNAME".source =
-  config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/APPNAME/.config/APPNAME";
-
-# Or link a single file to home directory
-home.file.".FILENAME".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/app/.FILENAME";
-```
-
-This allows you to edit configurations in the dotfiles repository and have them automatically reflected in your home directory.
-
-### Applying Configuration
-
-#### Full System Rebuild
-
-Apply all changes (system + user):
-```shell
-sudo nixos-rebuild switch --flake ~/dotfiles#nixos
-```
-
-#### Test Without Applying
-
-Preview changes without making them permanent:
-```shell
-sudo nixos-rebuild test --flake ~/dotfiles#nixos
-```
-
-#### Dry Run (Show What Would Change)
-
-```shell
-sudo nixos-rebuild dry-build --flake ~/dotfiles#nixos
-```
-
-#### Rollback to Previous Generation
-
-```shell
-# List previous generations
-sudo nixos-rebuild list-generations
-
-# Boot into a previous generation (at startup)
-sudo nixos-rebuild switch --flake ~/dotfiles#nixos --profile-name <generation-number>
-
-# Or use this to rollback to the previous generation
-sudo nixos-rebuild switch --flake ~/dotfiles#nixos -p /nix/var/nix/profiles/system-<N>-link
-```
-
-#### Update Flake Dependencies
-
-To update nixpkgs and home-manager to their latest versions:
-```shell
-nix flake update --flake ~/dotfiles
-sudo nixos-rebuild switch --flake ~/dotfiles#nixos
-```
-
-### Troubleshooting
-
-**Issue: "Cannot find flake" error**
-```shell
-# Ensure you're in the correct directory
+git clone https://github.com/your-username/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-# Try with explicit path
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
-**Issue: Home Manager changes not applied**
+The `nixos/` directory contains:
+- `flake.nix` - Flake configuration (entry point)
+- `hosts/default/configuration.nix` - System-wide settings
+- `hosts/default/home.nix` - User configuration (Home Manager)
+- `hosts/default/hardware-configuration.nix` - Hardware settings
+
+**For detailed instructions, troubleshooting, and advanced configurations, see [`nixos/README.md`](nixos/README.md).**
+
+## Traditional Linux Setup (GNU Stow)
+
+For **non-NixOS systems**, use [GNU Stow](https://www.gnu.org/software/stow/) to manage configuration files.
+
+**Prerequisites:**
 ```shell
-# Run home-manager explicitly
-home-manager switch --flake ~/dotfiles#
+# Install GNU Stow
+sudo pacman -S stow        # Arch/CachyOS
+sudo apt-get install stow  # Debian/Ubuntu
 ```
 
-**Issue: Package not found**
-```shell
-# Search for the correct package name
-nix search nixpkgs PACKAGE_NAME
+**Installation:**
 
-# Update flake to latest versions
-nix flake update
-```
+1. Clone the repository:
+   ```shell
+   git clone https://github.com/your-username/dotfiles.git ~/.dotfiles
+   cd ~/.dotfiles
+   ```
 
-**Issue: Want to start fresh**
-```shell
-# Remove flake lock file and rebuild (updates all dependencies)
-rm ~/dotfiles/flake.lock
-nix flake update --flake ~/dotfiles
-sudo nixos-rebuild switch --flake ~/dotfiles#nixos
-```
+2. Stow individual directories:
+   ```shell
+   stow alacritty fish git helix starship vim zed
+   ```
 
-## Installation with GNU Stow
+   Or stow all at once:
+   ```shell
+   for dir in */; do stow "$dir"; done
+   ```
 
-⚠️ **Note: GNU Stow is for non-NixOS systems only. If you are using NixOS, see the [NixOS Configuration](#nixos-configuration) section instead.**
+3. **Backup existing configs first** to avoid conflicts.
 
-[GNU Stow](https://www.gnu.org/software/stow/) is a symlink farm manager that helps manage symbolic links to configuration files. This method is suitable for traditional Linux distributions like CachyOS, Arch, Ubuntu, Debian, etc.
-
-1.  **Clone the repository:**
-    ```shell
-    git clone https://github.com/your-username/dotfiles.git ~/.dotfiles
-    ```
-    (Replace `your-username` with your actual GitHub username)
-
-2.  **Navigate to the dotfiles directory:**
-    ```shell
-    cd ~/.dotfiles
-    ```
-
-3.  **Stow individual directories:**
-    To install the dotfiles for a specific application, use `stow` with the directory name. For example, to install `fish` shell configurations:
-    ```shell
-    stow fish
-    ```
-    This will create symlinks from `~/.dotfiles/fish` to `~/.config/fish` and other relevant locations in your home directory.
-
-    You can also stow multiple directories:
-    ```shell
-    stow alacritty fish git helix kitty starship vim zed
-    ```
-    **Note:** Make sure to back up your existing dotfiles before stowing to avoid conflicts.
+**Available configurations:**
+- **`alacritty/`** - Terminal emulator
+- **`fish/`** - Fish shell configuration
+- **`git/`** - Git global config
+- **`helix/`** - Helix editor with language servers
+- **`kitty/`** - Kitty terminal emulator
+- **`starship/`** - Starship prompt
+- **`vim/`** - Vim configuration
+- **`zed/`** - Zed editor
 
 ## Scripts
 
-This repository includes several utility scripts to assist with system setup.
+This repository includes utility scripts for system setup.
 
 ### Install Tools (CachyOS)
 
-This script automates the installation of commonly used tools and development utilities on CachyOS. It provides an easy way to manage packages and includes post-installation configuration for Docker, Rust, and LocalSend.
-
-**Prerequisites:**
-
-The script requires `paru` (an AUR helper) to be installed:
+Automates installation of development tools on CachyOS:
 
 ```shell
-sudo pacman -S paru
+chmod +x scripts/install_tools-CachyOS.sh
+./scripts/install_tools-CachyOS.sh
 ```
 
-**Usage:**
+**Features:**
+- Installs packages from official and AUR repositories
+- Configures Docker (adds user to docker group)
+- Installs Rust toolchain
+- Sets up firewall rules for LocalSend
 
-1.  **Make the script executable:**
-    ```shell
-    chmod +x scripts/install_tools-CachyOS.sh
-    ```
-
-2.  **Review available packages:**
-    ```shell
-    ./scripts/install_tools-CachyOS.sh --list
-    ```
-
-3.  **Run the script:**
-    ```shell
-    ./scripts/install_tools-CachyOS.sh
-    ```
-    
-    The script will:
-    - Display all packages to be installed (separated by source: repository and AUR)
-    - Ask for confirmation before proceeding
-    - Update your system
-    - Install all packages
-    - Configure Docker (add your user to the docker group)
-    - Configure Rust (install stable toolchain if needed)
-    - Configure firewall rules for LocalSend if applicable
-
-**Available Options:**
-
+**Available options:**
 ```shell
-./scripts/install_tools-CachyOS.sh --help              # Show help message
-./scripts/install_tools-CachyOS.sh --list              # List packages without installing
-./scripts/install_tools-CachyOS.sh --skip-confirmation # Skip confirmation prompt
+./scripts/install_tools-CachyOS.sh --list              # List packages
+./scripts/install_tools-CachyOS.sh --skip-confirmation # Skip prompt
 ```
 
-**Customization:**
-
-To add or remove packages, edit the configuration section at the top of the script:
-
-1.  **Repository Packages:** Edit the `REPO_PKGS` array for packages from official CachyOS/Arch repositories
-2.  **AUR Packages:** Edit the `AUR_PKGS` array for community-maintained packages from the Arch User Repository
-
-Example - adding a new repository package:
-
-```bash
-REPO_PKGS=(
-    git
-    github-cli
-    # ... existing packages ...
-    neovim        # Add new package here
-)
-```
-
-The arrays are clearly marked in the script and support comments for easy organization.
-
-**Default Installed Packages:**
-
-**Repository Packages:**
-- **Development:** git, github-cli, lazygit, stow
-- **Navigation:** zoxide
-- **Container:** docker
-- **Terminal & Shell:** starship
-- **Applications:** obsidian, vlc, qbittorrent
-- **Languages:** go, rustup
-- **Editors:** helix, zed
-- **Language Servers & Formatters:**
-  - `gopls` - Go language server (code completion, diagnostics)
-  - `go-tools` - Go utilities (includes `goimports` for auto import management)
-  - `rust-analyzer` - Rust language server with macro expansion and full IDE support
-  - `pyright` - Python language server (type checking, completion)
-  - `python-ruff` - Python fast formatter and linter
-  - `yaml-language-server` - YAML support (Kubernetes, Ansible, GitHub Actions)
-  - `bash-language-server` - Bash/Shell script support
-  - `taplo` - TOML language server (configuration files, Cargo.toml)
-- **Utilities:** localsend, lazydocker
-
-**AUR Packages:**
-- microsoft-edge-stable-bin (proprietary web browser)
-- bruno-bin (API testing tool)
-
-**What the script does:**
-
-1.  Updates your system using `paru -Syu`
-2.  Installs repository packages from official CachyOS/Arch repositories
-3.  Installs AUR packages from the Arch User Repository
-4.  Configures installed tools:
-    - **Docker**: Enables the Docker service and adds your user to the docker group
-    - **Rust**: Installs the stable Rust toolchain via rustup
-    - **LocalSend**: Configures firewall rules (UFW or Firewalld) for port 53317
-
-**Note:** If you installed Docker, you may need to log out and back in for the group changes to take effect.
+See the script source for customization.
 
 ### Nerd Fonts Install
 
-This script automates the installation of [Nerd Fonts](https://www.nerdfonts.com/), which are essential for many terminal setups and code editors. The script provides an interactive interface for selecting fonts and supports both local and global installation.
-
-**Prerequisites:**
-
-Before running, ensure you have the following commands installed:
-- `wget` - for downloading font files
-- `unzip` - for extracting font archives
-- `fc-cache` - for updating the font cache (provided by `fontconfig`)
-
-On Arch-based systems (like CachyOS), install them using:
+Automates Nerd Fonts installation with interactive selection:
 
 ```shell
-sudo pacman -S wget unzip fontconfig
-```
-
-On Debian-based systems:
-
-```shell
-sudo apt-get install wget unzip fontconfig
-```
-
-**Usage:**
-
-1.  **Make the script executable:**
-    ```shell
-    chmod +x scripts/nerd-fonts-install.sh
-    ```
-
-2.  **Run the script:**
-    ```shell
-    ./scripts/nerd-fonts-install.sh
-    ```
-
-3.  **Follow the interactive prompts:**
-    - The script will check for required dependencies and notify you if any are missing.
-    - It will attempt to fetch the latest Nerd Fonts version from GitHub. If the network request fails, it will fall back to a default stable version.
-    - Choose between **local installation** (recommended for most users, installs to `~/.local/share/fonts/NerdFonts`) or **global installation** (for all users, installs to `/usr/local/share/fonts/NerdFonts`).
-    - A numbered list of available Nerd Fonts will be displayed. Select the fonts you want by entering their corresponding numbers separated by spaces (e.g., `1 5 12`).
-    - Review your selection and confirm to proceed with the download and installation.
-    - The script will download, extract, and install your selected fonts, then update the font cache.
-
-**Examples:**
-
-Install the Meslo font locally:
-```shell
+chmod +x scripts/nerd-fonts-install.sh
 ./scripts/nerd-fonts-install.sh
-# When prompted, select "1" for local installation
-# When shown the fonts list, enter the number corresponding to Meslo
 ```
 
-Install multiple fonts (e.g., Meslo, FiraCode, and JetBrainsMono):
-```shell
-./scripts/nerd-fonts-install.sh
-# When prompted, select "1" for local installation
-# When shown the fonts list, enter the numbers for the fonts you want (e.g., "8 13 25")
+**Features:**
+- Downloads Nerd Fonts from GitHub
+- Interactive font selection
+- Local or global installation support
+- Automatic font cache update
+
+## Directory Structure
+
 ```
-
-**Notes:**
-
-- Local installation is recommended as it doesn't require `sudo` and won't affect other users on the system.
-- For global installation, the script will automatically request `sudo` privileges if needed.
-- After installation, restart your terminal or applications to see the newly installed fonts.
-- Each Nerd Font pack varies in size (typically 10-120 MB). Consider your bandwidth and storage when selecting multiple fonts.
+dotfiles/
+├── alacritty/          # Alacritty terminal config
+├── fish/               # Fish shell config
+├── git/                # Git configuration
+├── helix/              # Helix editor config
+├── kitty/              # Kitty terminal config
+├── nixos/              # NixOS configuration (see nixos/README.md)
+├── scripts/            # Utility scripts
+├── starship/           # Starship prompt config
+├── vim/                # Vim configuration
+├── zed/                # Zed editor config
+└── README.md           # This file
+```
 
 ## Editor Configurations
 
 ### Helix
 
-[Helix](https://helix-editor.com/) is a post-modern text editor written in Rust, combining the best of Vim and modern editor design. This repository includes comprehensive Helix configurations optimized for Go, Rust, Python, and DevOps workflows.
+[Helix](https://helix-editor.com/) is configured with language servers for Go, Rust, Python, YAML, Bash, and TOML.
 
-**Prerequisites:**
-
-Helix requires language servers and formatters to provide intelligent code completion, linting, and formatting. On CachyOS, install these tools:
-
+**Installation (Traditional Linux):**
 ```shell
-# Go development
-sudo pacman -S gopls go-tools
-
-# Rust development
-sudo pacman -S rust-analyzer
-
-# Python development
-sudo pacman -S pyright python-ruff
-
-# DevOps tools (YAML, Bash, TOML)
-sudo pacman -S yaml-language-server bash-language-server taplo-cli
+sudo pacman -S helix
+stow helix
 ```
 
-**Installation:**
+**Installation (NixOS):**
+See `nixos/README.md` — Helix is included in the Home Manager configuration.
 
-1.  **Install Helix:**
-    ```shell
-    sudo pacman -S helix
-    ```
-
-2.  **Optionally, create a convenient alias in your Fish shell:**
-    Add this line to your `~/.config/fish/config.fish`:
-    ```fish
-    abbr --add hx helix
-    ```
-    This lets you type `hx` instead of `helix` to open the editor.
-
-3.  **Install the dotfiles configuration:**
-    ```shell
-    stow helix
-    ```
-
-**Configuration Files:**
-
-The Helix configuration includes:
-
--   **`config.toml`**: Main editor settings including:
-    - Relative line numbers for easy Vim-style jumping
-    - Custom keybindings (e.g., `Ctrl+s` to save, `{}` to navigate buffers)
-    - LSP and inlay hints configuration
-    - Soft wrapping and visual enhancements
-    - File explorer integration with `Ctrl+e`
-
--   **`languages.toml`**: Language-specific configurations:
-    - **Go**: Uses `goimports` for automatic import management and formatting
-    - **Rust**: Configured with `rust-analyzer` for full IDE-like support
-    - **Python**: Uses `ruff` for fast formatting and linting
-    - **YAML**: Auto-formatting for Kubernetes and Ansible configurations
-    - **BASH**: Shell script formatting and linting
-    - **TOML**: Configuration file support
-
-**Language Server & Formatter Support:**
-
-The following table shows which LSP tools support which languages and file types:
-
-| Language | LSP Tool | Package | Features |
-|----------|----------|---------|----------|
-| **Go** | `gopls` | `gopls` | Code completion, diagnostics, go-to-definition |
-| **Go** | `goimports` | `go-tools` | Auto-format, automatic import management |
-| **Rust** | `rust-analyzer` | `rust-analyzer` | IDE-like support, macro expansion, inlay hints |
-| **Python** | `pyright` | `pyright` | Type checking, code completion, diagnostics |
-| **Python** | `ruff` | `python-ruff` | Fast formatting and linting |
-| **YAML** | `yaml-language-server` | `yaml-language-server` | Kubernetes, Ansible, GitHub Actions support |
-| **BASH/Shell** | `bash-language-server` | `bash-language-server` | Script support, variable completion |
-| **TOML** | `taplo` | `taplo` | Configuration files, Cargo.toml support |
-
-**Verification:**
-
-After installation, verify that all language servers are available:
-
+**Verify language servers:**
 ```shell
 hx --health
 ```
 
-You should see green `OK` indicators for all installed tools. Look for:
-- `go` → gopls ✓
-- `rust` → rust-analyzer ✓
-- `python` → pyright ✓
-- `yaml` → yaml-language-server ✓
-- `bash` → bash-language-server ✓
-- `toml` → taplo ✓
+## Contributing
 
-**Key Features:**
+Feel free to fork and customize for your own setup. Some tips:
+- Backup your existing dotfiles before stowing
+- On NixOS, never use stow — use the flake configuration instead
+- Test configuration changes before committing to git
 
--   **Auto-formatting on save** for supported languages
--   **Semantic tokens** for improved syntax highlighting
--   **Inlay hints** for parameter names and types
--   **Multi-cursor support** with powerful selection tools
--   **Modal editing** with Vim-inspired keybindings
--   **Built-in file explorer** and LSP integration
+## License
 
-**Quick Tips:**
-
--   Use `:` to enter command mode (like Vim)
--   Use `/` to search, `n` to find next occurrence
--   Use `Ctrl+e` to toggle the file explorer
--   Use `{}` to jump between open buffers (files)
--   Use `Ctrl+s` to save (custom keybinding)
--   Type `:hx --health` inside the editor to check language server status
-
-## Directory Structure
-
-Here's an overview of the directories within this repository and what they contain:
-
--   **`alacritty/`**: Configuration files for the [Alacritty](https://github.com/alacritty/alacritty) terminal emulator.
--   **`fish/`**: Configuration files for the [Fish shell](https://fishshell.com/).
--   **`git/`**: Global Git configurations (e.g., `~/.gitconfig`).
--   **`helix/`**: Configuration files for the [Helix](https://helix-editor.com/) editor, including language server and formatter configurations.
--   **`kitty/`**: Configuration files for the [Kitty](https://sw.kovidgoyal.net/kitty/) terminal emulator.
--   **`nixos/`**: NixOS declarative configuration using Nix Flakes. Includes system-level configuration, hardware settings, and Home Manager user configuration.
--   **`scripts/`**: Various utility scripts for system setup and maintenance.
--   **`starship/`**: Configuration for the [Starship](https://starship.rs/) prompt.
--   **`vim/`**: Configuration files for [Vim](https://www.vim.org/).
--   **`zed/`**: Configuration files for the [Zed](https://zed.dev/) editor.
+These dotfiles are provided as-is for personal use.

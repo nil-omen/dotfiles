@@ -109,13 +109,6 @@ if status is-interactive
     alias psmem='ps auxf | sort -nr -k 4'
     alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
-    # Misc
-    alias wget='wget -c '
-    alias tarnow='tar -acf '
-    alias untar='tar -zxvf '
-    alias jctl="journalctl -p 3 -xb"
-    alias tb='nc termbin.com 9999'
-
     #####################
     # INITIALIZATION    #
     #####################
