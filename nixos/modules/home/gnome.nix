@@ -32,6 +32,7 @@ in
       color-scheme = "prefer-dark";
       enable-hot-corners = false;
       show-battery-percentage = true;
+      cursor-theme = "Bibata-Modern-Ice";
     };
 
     "org/gnome/desktop/input-sources" = {
