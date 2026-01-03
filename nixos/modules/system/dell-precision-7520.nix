@@ -16,14 +16,12 @@
 
   # Disable Trackpoint
   services.xserver.inputClassSections = [
-    {
-      identifier = "Disable Trackpoint";
-      matchDriver = "libinput";
-      matchProduct = "DualPoint Stick|TrackPoint|AlpsPS/2 ALPS DualPoint Stick";
-      extraConfig = ''
-        Option "Ignore" "on"
-      '';
-    }
+    ''
+      Identifier "Disable Trackpoint"
+      MatchDriver "libinput"
+      MatchProduct "DualPoint Stick|TrackPoint|AlpsPS/2 ALPS DualPoint Stick"
+      Option "Ignore" "on"
+    ''
   ];
 
   # --- Hardware Support ---
