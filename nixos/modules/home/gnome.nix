@@ -107,19 +107,6 @@ in
     };
   };
 
-  # --- Enable Pointer Cursor ---
-  # Changed Cursor to Bibata-Modern-Ice
-  home.pointerCursor = {
-    enable = true;
-    name = "Bibata-Modern-Ice";
-    package = pkgs.bibata-cursors;
-    size = 24;
-
-    # Ensures the cursor works in both X11 and Wayland (GNOME) apps
-    gtk.enable = true;
-    x11.enable = true;
-  };
-
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gnome ];

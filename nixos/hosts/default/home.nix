@@ -18,14 +18,56 @@ in
   home.username = "king";
   home.homeDirectory = "/home/king";
 
-  # Link apps to system menu
-  targets.genericLinux.enable = true;
+  # # Link apps to system menu
+  # targets.genericLinux.enable = true;
+
+  # --- Global Cursor Configuration ---
+  home.pointerCursor = {
+    enable = true;
+    name = "Bibata-Modern-Ice";
+    package = pkgs.bibata-cursors;
+    size = 24;
+
+    # These ensure the cursor is set for X11 (old apps) and GTK apps
+    gtk.enable = true;
+    x11.enable = true;
+
+  };
+
+  # (Optional) Some Wayland compositors (like Hyprland) need this variable set
+  home.sessionVariables = {
+    XCURSOR_THEME = "Bibata-Modern-Ice";
+    XCURSOR_SIZE = "24";
+  };
+
+  # --- Global GTK Theme (Icons & Fonts) ---
+  gtk = {
+    enable = true;
+
+    # 1. Install Papirus Icon Theme
+    iconTheme = {
+      name = "Papirus-Dark"; # Options: "Papirus", "Papirus-Light", "Papirus-Dark"
+      package = pkgs.papirus-icon-theme;
+    };
+
+    # 2. (Optional) Force the Theme in GTK apps
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+    # 3. [NEW] FONT CONFIGURATION
+    # To change the font, uncomment the lines below and change the name/package.
+    # font = {
+    #   name = "Inter 11";
+    #   package = pkgs.inter;
+    # };
+  };
 
   home.packages = with pkgs; [
     # -- Editors --
     helix
     zed-editor
-    # vim # Added per request
+    # vim
 
     # -- Nix support --
     nixd
@@ -33,7 +75,7 @@ in
 
     # -- Terminal Tools --
     alacritty
-    # kitty # Added per request
+    # kitty
     zoxide
     eza
     fzf
@@ -44,15 +86,17 @@ in
     # -- Version Control --
     gh
     lazygit
-    # stow # No longer needed!
+    jujutsu # Git-like version control system
 
     # -- Browser --
     microsoft-edge
 
     # -- Utilities --
     wl-clipboard
-    localsend
-    bruno
+    localsend # File Sharing
+    bruno # API Testing
+    foliate # eBook Reader
+    haruna # Video Player
 
     # -- Go Development --
     go
@@ -95,6 +139,7 @@ in
 
   # --- 3. Linking Dotfiles (The "Whole Folder" Strategy) ---
 
+  # --- Fish ---
   # > .config/fish/functions (Whole folder)
   xdg.configFile."fish/functions".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/functions";
@@ -112,6 +157,8 @@ in
   xdg.configFile."fish/cachyos-config.fish".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fish/.config/fish/cachyos-config.fish";
 
+  # --- Apps ---
+
   # > .config/alacritty (Includes all themes and alacritty.toml)
   xdg.configFile."alacritty".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/alacritty/.config/alacritty";
@@ -123,7 +170,7 @@ in
   # > .config/zed (Includes settings, keymap, AND tasks.json)
   xdg.configFile."zed".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/zed/.config/zed";
 
-  # > .config/kitty (Just in case)
+  # > .config/kitty
   xdg.configFile."kitty".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/kitty/.config/kitty";
 

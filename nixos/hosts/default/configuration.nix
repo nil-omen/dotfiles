@@ -20,10 +20,18 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Networking
+  # 53317: LocalSend
+  # 8384: FileBrowser Plugin on KoReader on kindle (Based on Syncthing)
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 53317 ];
-  networking.firewall.allowedUDPPorts = [ 53317 ];
+  networking.firewall.allowedTCPPorts = [
+    53317
+    8384
+  ];
+  networking.firewall.allowedUDPPorts = [
+    53317
+    8384
+  ];
 
   # Time and Locale
   time.timeZone = "Africa/Cairo";
