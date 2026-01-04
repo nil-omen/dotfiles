@@ -14,15 +14,15 @@
     };
   };
 
-  # Disable Trackpoint
-  services.xserver.inputClassSections = [
-    ''
-      Identifier "Disable Trackpoint"
-      MatchDriver "libinput"
-      MatchProduct "DualPoint Stick|TrackPoint|AlpsPS/2 ALPS DualPoint Stick"
-      Option "Ignore" "on"
-    ''
-  ];
+  # --- Input Device Management ---
+  services.udev.extraRules = ''
+    # Disable the Trackpoint (Nub)
+    ACTION=="add|change", KERNEL=="event*", ATTRS{name}=="DualPoint Stick", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+
+    # Optional: Sometimes the stick also reports as a generic PS/2 mouse.
+    # If the stick STILL works after adding the line above, uncomment the line below:
+    # ACTION=="add|change", KERNEL=="event*", ATTRS{name}=="PS/2 Generic Mouse", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+  '';
 
   # --- Hardware Support ---
   hardware.graphics = {
