@@ -78,6 +78,7 @@ in
       custom-keybindings = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
       ];
     };
 
@@ -91,8 +92,15 @@ in
     # Custom 1: Zed
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       name = "Zed";
-      command = "zeditor"; # Ensure command matches the binary name
+      command = "zeditor";
       binding = "<Super>z";
+    };
+
+    # Custom 2: Character Map
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+      name = "Characters";
+      command = "gnome-characters";
+      binding = "<Super>comma";
     };
   };
 
