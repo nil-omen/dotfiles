@@ -128,7 +128,9 @@ in
     enable = true;
   };
   xdg.configFile."starship.toml".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/starship/.config/";
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/starship/.config/starship.toml";
+  xdg.configFile."starship-nix.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/starship/.config/starship-nix.toml";
 
   programs.fish = {
     enable = true;

@@ -81,33 +81,31 @@ if status is-interactive
     end
 
     #####################
-    # ALIASES           #
+    # ABBREVIATIONS     #
     #####################
+    # 'abbr' is preferred over 'alias' in Fish.
+    # It expands the command in your prompt before you run it.
 
     # Navigation
-    alias ..='cd ..'
-    alias ...='cd ../..'
-    alias ....='cd ../../..'
-    alias .....='cd ../../../..'
-    alias ......='cd ../../../../..'
+    abbr --add .. 'cd ..'
+    abbr --add ... 'cd ../..'
+    abbr --add .... 'cd ../../..'
 
-    # Eza (Better LS)
-    alias ls='eza -al --color=always --group-directories-first --icons=always'
-    alias la='eza -a --color=always --group-directories-first --icons=always'
-    alias ll='eza -l --color=always --group-directories-first --icons=always'
-    alias lt='eza -aT --color=always --group-directories-first --icons=always'
-    alias l.="eza -a | grep -e '^\.'"
+    # Eza (LS replacement)
+    # Using 'abbr' means when you type 'll', it expands to the full eza command
+    abbr --add ls 'eza -al --color=always --group-directories-first --icons=always'
+    abbr --add la 'eza -a --color=always --group-directories-first --icons=always'
+    abbr --add ll 'eza -l --color=always --group-directories-first --icons=always'
+    abbr --add lt 'eza -aT --color=always --group-directories-first --icons=always'
+
+    # Git (Common workflow boosters)
+    abbr --add gs 'git status'
+    abbr --add ga 'git add .'
+    abbr --add gc 'git commit -m'
+    abbr --add gp 'git push'
 
     # Utilities
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-
-    # Process management
-    alias psmem='ps auxf | sort -nr -k 4'
-    alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+    abbr --add pstop 'ps auxf | sort -nr -k 4 | head -10'
 
     #####################
     # INITIALIZATION    #
@@ -119,10 +117,77 @@ if status is-interactive
     end
 
     # Initialize tools
-    zoxide init fish | source
-    starship init fish | source
+    if type -q zoxide; zoxide init fish | source; end
+    if type -q starship; starship init fish | source; end
 
     # Set editor and visual
     set -gx EDITOR hx
     set -gx VISUAL hx
+
+
+    #####################
+    # FZF MANUAL SETUP  #
+    #####################
+
+    # 1. Enable FZF keybindings (Ctrl+R history, Ctrl+T files, Alt+C cd)
+    # This requires fzf 0.48.0+ (standard on Arch/NixOS)
+    if type -q fzf
+        fzf --fish | source
+    end
+
+    # 2. Use 'fd' (if installed) instead of 'find'
+    # This makes fzf much faster and respect .gitignore
+    if type -q fd
+        set -gx FZF_DEFAULT_COMMAND 'fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+        set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+    end
+
+    # 3. Visual Styling (Matches your modern setup)
+    # layout=reverse: Search bar at top, lists down
+    # border: Adds a nice border
+    set -gx FZF_DEFAULT_OPTS "
+        --layout=reverse
+        --border
+        --height=90%
+        --preview 'bat --style=numbers --color=always --line-range :500 {}'
+        --preview-window 'right:60%'
+        --bind 'ctrl-/:toggle-preview'
+    "
+    function fzf_smart_file_widget
+        # Get the current token (word) at cursor (e.g., "src/")
+        set -l token (commandline -t)
+
+        # Default settings
+        set -l search_dir "."
+        set -l query ""
+
+        # Logic: If token is a real directory, search inside it.
+        # Otherwise, use the token as the fuzzy search query.
+        if test -d "$token"
+            set search_dir "$token"
+        else
+            set query "$token"
+        end
+
+        # FIX: Define command as a LIST (no quotes around the whole line)
+        # This ensures Fish sees 'fd' as the command and the rest as arguments.
+        if type -q fd
+            set command fd --type f --hidden --follow --exclude .git . $search_dir
+        else
+            set command find $search_dir -type f
+        end
+
+        # Execute the list ($command) -> pipe to fzf
+        set -l result ($command | fzf --query "$query" --height=40% --layout=reverse --border --preview 'bat --style=numbers --color=always {}')
+
+        # If we selected something, replace the token with the result
+        if test -n "$result"
+            commandline -t -- $result
+        end
+
+        commandline -f repaint
+    end
+    # Bind Ctrl+T to this new smart function
+    bind -M insert \ct fzf_smart_file_widget  # For Vi Insert Mode
+    bind \ct fzf_smart_file_widget            # For Normal/Default Mode
 end
