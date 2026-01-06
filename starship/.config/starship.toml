@@ -10,6 +10,7 @@ $directory\
 $git_branch\
 $git_status\
 [](fg:green bg:teal)\
+$nix_shell\
 $c\
 $rust\
 $golang\
@@ -176,6 +177,14 @@ format = '[[($all_status$ahead_behind )](fg:base bg:green)]($style)'
 symbol = ""
 style = "bg:teal"
 format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
+
+[nix_shell]
+disabled = false
+symbol = ""
+style = "bg:teal"
+impure_msg = "" # Hides the word 'impure' to keep it clean, just shows the icon
+pure_msg = ""   # Hides the word 'pure'
+format = '[[ $symbol$state ](fg:base bg:teal)]($style)'
 
 [c]
 symbol = " "

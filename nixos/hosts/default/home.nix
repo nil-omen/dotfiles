@@ -103,6 +103,7 @@ in
     gopls
     delve
     gotools
+    gcc
 
     # -- Using Stable Packages --
     # By default, packages come from nixos-unstable (latest)
@@ -127,7 +128,7 @@ in
     enable = true;
   };
   xdg.configFile."starship.toml".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/starship/.config/starship.toml";
+    config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/starship/.config/";
 
   programs.fish = {
     enable = true;
