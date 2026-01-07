@@ -15,8 +15,8 @@
   },
   "agent": {
     "default_model": {
-      "provider": "google",
-      "model": "gemini-2.5-flash",
+      "provider": "copilot_chat",
+      "model": "gpt-5-mini",
     },
     "model_parameters": [],
   },

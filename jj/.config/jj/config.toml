@@ -1,0 +1,17 @@
+[user]
+name = "King"
+email = "24613526+R-D-King@users.noreply.github.com"
+
+[ui]
+editor = "hx"
+paginate = "never"
+default-command = "log"
+diff-editor = ":builtin"
+
+[git]
+# Adds a prefix to anonymous change branches when you push them.
+# Prevents name collisions if you push multiple "change-..." branches.
+push-branch-prefix = "king/change-"
+
+# Prevents you from accidentally pushing commits marked as "private" or "wip"
+private-commits = "description(glob:'wip:*') | description(glob:'private:*')"

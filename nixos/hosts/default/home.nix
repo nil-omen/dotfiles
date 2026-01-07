@@ -177,6 +177,9 @@ in
   xdg.configFile."kitty".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/kitty/.config/kitty";
 
+  # > .config/jj (Includes config.toml)
+  xdg.configFile."jj".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/jj/.config/jj";
+
   # --- 4. Home Directory Files ---
 
   # > .gitconfig (Uses the one at ~/dotfiles/git/.gitconfig)
