@@ -20,6 +20,12 @@ if status is-interactive
     fish_add_path /opt/nvim-linux-x86_64/bin
     fish_add_path ~/Applications/depot_tools
 
+    # NixOS Specific: Allow unfree packages (e.g., for 'nix run')
+    # The check ensures this only runs on NixOS, ignoring CachyOS/Arch
+    if test -f /etc/NIXOS
+        set -gx NIXPKGS_ALLOW_UNFREE 1
+    end
+
     # Format man pages (requires 'bat' installed)
     set -x MANROFFOPT "-c"
     set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"

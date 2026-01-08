@@ -68,6 +68,7 @@ in
     helix
     zed-editor
     # vim
+    antigravity
 
     # -- Nix support --
     nixd
