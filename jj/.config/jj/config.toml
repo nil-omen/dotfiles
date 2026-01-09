@@ -22,3 +22,13 @@ um = ["bookmark", "set", "main", "-r", "@"]
 
 # "Bookmark Set": Shortens the prefix
 bms = ["bookmark", "set"]
+
+# Git Muscle Memory
+# s = ["status"]
+# l = ["log"]
+# d = ["diff"]
+push = ["git", "push"]
+fetch = ["git", "fetch"]
+
+[colors]
+"change_id" = { fg = "cyan", bold = true }
