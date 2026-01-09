@@ -15,3 +15,10 @@ push-branch-prefix = "king/change-"
 
 # Prevents you from accidentally pushing commits marked as "private" or "wip"
 private-commits = "description(glob:'wip:*') | description(glob:'private:*')"
+
+[aliases]
+# "Update Main": Moves 'main' to where you are right now (@)
+um = ["bookmark", "set", "main", "-r", "@"]
+
+# "Bookmark Set": Shortens the prefix
+bms = ["bookmark", "set"]
