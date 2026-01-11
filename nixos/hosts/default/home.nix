@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  pkgs-stable,
+  pkgs-unstable,
   ...
 }:
 
@@ -71,27 +71,27 @@ in
 
   home.packages = with pkgs; [
     # -- Editors --
-    helix
-    zed-editor
-    antigravity
+    (pkgs-unstable.helix)
+    (pkgs-unstable.zed-editor)
+    (pkgs-unstable.antigravity)
 
     # -- Nix support --
-    nixd
-    nixfmt-rfc-style
+    (pkgs-unstable.nixd)
+    (pkgs-unstable.nixfmt)
 
     # -- Terminal Tools --
-    alacritty
-    zoxide
-    eza
-    fzf
-    bat
-    ripgrep
-    fd
+    (pkgs-unstable.alacritty)
+    (pkgs-unstable.zoxide)
+    (pkgs-unstable.eza)
+    (pkgs-unstable.fzf)
+    (pkgs-unstable.bat)
+    (pkgs-unstable.ripgrep)
+    (pkgs-unstable.fd)
 
     # -- Version Control --
-    gh
-    lazygit
-    jujutsu # Git-like version control system
+    (pkgs-unstable.gh)
+    (pkgs-unstable.lazygit)
+    (pkgs-unstable.jujutsu) # Git-like version control system
 
     # -- Browser --
     microsoft-edge
@@ -99,28 +99,26 @@ in
     # -- Utilities --
     wl-clipboard
     localsend # File Sharing
-    bruno # API Testing
+    (pkgs-unstable.bruno) # API Testing
     foliate # eBook Reader
     haruna # Video Player
 
-    # -- Go Development --
-    go
-    gopls
-    delve
-    gotools
-    gcc
+    # # -- Go Development --
+    # go
+    # gopls
+    # delve
+    # gotools
+    # gcc
 
-    # -- Using Stable Packages --
-    # By default, packages come from nixos-unstable (latest)
-    # To use a stable package instead, use pkgs-stable:
+    # -- Using Unstable Packages --
+    # By default, packages come from nixos-25.11 (stable)
+    # To use a bleeding-edge package from unstable, use pkgs-unstable:
     #
-    # Example: Use stable Firefox instead of unstable
-    # (pkgs-stable.firefox)
+    # Example: Use latest Helix
+    # (pkgs-unstable.helix)
     #
-    # Example: Use stable Rust instead of unstable
-    # (pkgs-stable.rustup)
-    #
-    # Stable packages are tested and more reliable, but less frequently updated
+    # Example: Use latest Rust toolchain
+    # (pkgs-unstable.rustup)
   ];
 
   # --- 1. Git Setup ---

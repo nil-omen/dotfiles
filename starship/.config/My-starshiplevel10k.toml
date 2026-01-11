@@ -15,10 +15,10 @@ $fill\
 [](fg:surface0)\
 
 
-$c$golang$java$nodejs$python$rust\
 $status\
 $cmd_duration\
 [](bg:surface0 fg:overlay0)\
+$c$golang$java$nodejs$python$rust\
 $username\
 $hostname\
 [](bg:surface0 fg:overlay0)\

@@ -2,15 +2,15 @@
   description = "Nixos config for King";
 
   inputs = {
-    # Default: unstable branch (latest packages, more frequent updates)
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Default: Stable branch (tested, reliable, less frequent updates)
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
-    # Stable branch (tested, more stable, less frequent updates)
-    # Update version when a new stable release is available
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+    # Unstable branch (latest packages, more frequent updates)
+    # Use this for specific packages that need to be bleeding edge
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -19,13 +19,16 @@
     {
       self,
       nixpkgs,
-      nixpkgs-stable,
+      nixpkgs-unstable,
       home-manager,
       ...
     }@inputs:
     let
-      # Create pkgs-stable from the stable branch
-      pkgs-stable = nixpkgs-stable.legacyPackages.x86_64-linux;
+      # Create pkgs-unstable from the unstable branch
+      pkgs-unstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
     in
     {
       nixosConfigurations = {
@@ -36,7 +39,7 @@
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {
-            inherit pkgs-stable; # Pass stable packages to modules
+            inherit pkgs-unstable; # Pass unstable packages to modules
           };
           modules = [
             ./hosts/default/configuration.nix
@@ -44,6 +47,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit pkgs-unstable; };
               home-manager.users.king = import ./hosts/default/home.nix;
               # "If you find a file blocking you, rename it to .backup and keep going."
               home-manager.backupFileExtension = "backup";

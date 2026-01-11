@@ -2,7 +2,7 @@
 
 Complete declarative NixOS setup using Nix Flakes. Manages system state, packages, services, and dotfiles from one source of truth.
 
-**Default:** `nixos-unstable` (latest packages). Optional: `nixos-25.11` stable (tested, reliable).
+**Default:** `nixos-25.11` stable (tested, reliable). Optional: `nixos-unstable` (latest packages).
 
 ## Quick Start
 
@@ -49,8 +49,8 @@ home-manager switch --flake ./nixos#
 **User packages** (`home.nix`):
 ```nix
 home.packages = with pkgs; [
-  helix           # unstable (default)
-  (pkgs-stable.firefox)  # stable (use with parentheses!)
+  ripgrep             # stable (default)
+  (pkgs-unstable.helix) # unstable (use with parentheses!)
 ];
 ```
 
@@ -58,7 +58,7 @@ home.packages = with pkgs; [
 ```nix
 environment.systemPackages = with pkgs; [
   curl
-  (pkgs-stable.postgresql)  # stable
+  (pkgs-unstable.neovim)  # unstable
 ];
 ```
 
@@ -79,25 +79,25 @@ nix search nixpkgs PACKAGE_NAME
 
 ## Channels Explained
 
-### Unstable (Default)
+### Stable (Default)
+- Tested packages, 6-month release cycle
+- Best for: stability, servers, everyday use
+- Manually updated (or change input to new release)
+
+### Unstable
 - Latest packages, daily updates
-- Best for: editors, CLI tools, development
+- Best for: specific tools needing latest features
 - Auto-updated with `nix flake update`
 
-### Stable (nixos-25.11)
-- Tested packages, 6-month release cycle
-- Best for: databases, web servers, critical services
-- **Manually** updated by editing `flake.nix`
+### Using Unstable Packages
 
-### Using Stable Packages
-
-**Remember: Always use parentheses with `pkgs-stable`!**
+**Remember: Always use parentheses with `pkgs-unstable`!**
 
 ```nix
 home.packages = with pkgs; [
-  helix                      # unstable
-  (pkgs-stable.firefox)      # stable ← needs ()
-  (pkgs-stable.postgresql)   # stable ← needs ()
+  firefox                      # stable
+  (pkgs-unstable.helix)        # unstable ← needs ()
+  (pkgs-unstable.jujutsu)      # unstable ← needs ()
 ];
 ```
 
@@ -107,7 +107,9 @@ When new stable version releases:
 
 1. Edit `flake.nix`:
    ```nix
-   nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
+   # Example: Updating from 25.11 to 26.05
+   # Update the URL to the new stable release
+   nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
    ```
 
 2. Rebuild:
@@ -119,7 +121,7 @@ When new stable version releases:
 3. Commit:
    ```shell
    git add ./nixos/flake.nix ./nixos/flake.lock
-   git commit -m "Update stable channel to nixos-26.05"
+   git commit -m "Update system to nixos-26.05"
    ```
 
 **No auto-updates:** Only update when you explicitly change the version.
@@ -178,8 +180,8 @@ in
 
 - **User:** king
 - **System:** Dell Precision 7520 + GNOME
-- **Default Branch:** nixos-unstable
-- **Stable Branch:** nixos-25.11 (Dec 2024)
+- **Default Branch:** nixos-25.11 (Stable)
+- **Unstable Branch:** nixos-unstable (Latest)
 - **Key Packages:** Go, Rust, Python, Helix, Zed, Fish, Git
 
 ## Resources

@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  pkgs-stable,
+  pkgs-unstable,
   ...
 }:
 
@@ -102,16 +102,15 @@
   ];
 
   # System Packages
-  # By default, packages come from nixos-unstable (latest, frequent updates)
-  # To use a stable package instead, use pkgs-stable:
+  # By default, packages come from nixos-25.11 (stable)
+  # To use an unstable package (latest version), use pkgs-unstable:
   #
-  # Example: Use stable PostgreSQL instead of unstable
-  # (pkgs-stable.postgresql)
+  # Example: Use unstable Neovim for latest features
+  # (pkgs-unstable.neovim)
   #
-  # Example: Use stable Nginx instead of unstable
-  # (pkgs-stable.nginx)
+  # Example: Use unstable Helix
+  # (pkgs-unstable.helix)
   #
-  # Stable packages are tested and more reliable, recommended for system services
   environment.systemPackages = with pkgs; [
     btop
   ];
