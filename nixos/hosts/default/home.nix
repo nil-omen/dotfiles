@@ -63,11 +63,16 @@ in
     # };
   };
 
+  # --- Global Direnv Configuration ---
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true; # Essential for Flakes speed
+  };
+
   home.packages = with pkgs; [
     # -- Editors --
     helix
     zed-editor
-    # vim
     antigravity
 
     # -- Nix support --
@@ -76,7 +81,6 @@ in
 
     # -- Terminal Tools --
     alacritty
-    # kitty
     zoxide
     eza
     fzf
