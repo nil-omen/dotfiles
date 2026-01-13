@@ -29,4 +29,25 @@
 
   # GDM integration is automatic when niri is enabled system-wide, it searches /share/wayland-sessions
   services.displayManager.gdm.enable = true;
+
+  # Essential Gnome Utilities that user wants to keep
+  environment.systemPackages = with pkgs; [
+    nautilus # File Manager
+    evince # Document Viewer
+    gnome-disk-utility # Disk Management
+    file-roller # Archive Manager
+    gnome-text-editor # Simple Text Editor (Optional, user likes for small changes)
+    loupe # Image Viewer (modern replacement for Eye of Gnome)
+
+    # Core system tools
+    libsecret # Secret management (important for auth)
+    polkit_gnome # Polkit agent
+    seahorse # Keyring manager
+  ];
+
+  # Use Gnome keyring for secrets
+  services.gnome.gnome-keyring.enable = true;
+
+  # Ensure Nautilus extensions work (optional but good)
+  programs.nautilus-open-any-terminal.enable = true;
 }

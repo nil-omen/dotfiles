@@ -111,10 +111,10 @@ in
         "Mod+Up".action.focus-window-up = [ ];
         "Mod+Down".action.focus-window-down = [ ];
 
-        "Mod+H".action.focus-column-left = [ ];
-        "Mod+J".action.focus-window-down = [ ];
-        "Mod+K".action.focus-window-up = [ ];
-        "Mod+L".action.focus-column-right = [ ];
+        # "Mod+H".action.focus-column-left = [ ];
+        # "Mod+J".action.focus-window-down = [ ];
+        # "Mod+K".action.focus-window-up = [ ];
+        # "Mod+L".action.focus-column-right = [ ];
 
         "Mod+Home".action.focus-column-first = [ ];
         "Mod+End".action.focus-column-last = [ ];
@@ -128,25 +128,25 @@ in
         "Mod+Ctrl+Up".action.move-window-up = [ ];
         "Mod+Ctrl+Right".action.move-column-right = [ ];
 
-        "Mod+Ctrl+H".action.move-column-left = [ ];
-        "Mod+Ctrl+J".action.move-window-down = [ ];
-        "Mod+Ctrl+K".action.move-window-up = [ ];
-        "Mod+Ctrl+L".action.move-column-right = [ ];
+        # "Mod+Ctrl+H".action.move-column-left = [ ];
+        # "Mod+Ctrl+J".action.move-window-down = [ ];
+        # "Mod+Ctrl+K".action.move-window-up = [ ];
+        # "Mod+Ctrl+L".action.move-column-right = [ ];
 
         "Mod+Ctrl+Home".action.move-column-to-first = [ ];
         "Mod+Ctrl+End".action.move-column-to-last = [ ];
 
         # --- Monitor Focus ---
-        "Mod+Shift+H".action.focus-monitor-left = [ ];
-        "Mod+Shift+J".action.focus-monitor-down = [ ];
-        "Mod+Shift+K".action.focus-monitor-up = [ ];
-        "Mod+Shift+L".action.focus-monitor-right = [ ];
+        # "Mod+Shift+H".action.focus-monitor-left = [ ];
+        # "Mod+Shift+J".action.focus-monitor-down = [ ];
+        # "Mod+Shift+K".action.focus-monitor-up = [ ];
+        # "Mod+Shift+L".action.focus-monitor-right = [ ];
 
-        # --- Move Column to Monitor ---
-        "Mod+Shift+Ctrl+H".action.move-column-to-monitor-left = [ ];
-        "Mod+Shift+Ctrl+J".action.move-column-to-monitor-down = [ ];
-        "Mod+Shift+Ctrl+K".action.move-column-to-monitor-up = [ ];
-        "Mod+Shift+Ctrl+L".action.move-column-to-monitor-right = [ ];
+        # # --- Move Column to Monitor ---
+        # "Mod+Shift+Ctrl+H".action.move-column-to-monitor-left = [ ];
+        # "Mod+Shift+Ctrl+J".action.move-column-to-monitor-down = [ ];
+        # "Mod+Shift+Ctrl+K".action.move-column-to-monitor-up = [ ];
+        # "Mod+Shift+Ctrl+L".action.move-column-to-monitor-right = [ ];
 
         # --- Workspace Navigation ---
         "Mod+Page_Down".action.focus-workspace-down = [ ];

@@ -97,6 +97,18 @@
   # Fonts
   fonts.packages = with pkgs; [
     nerd-fonts.meslo-lg
+    nerd-fonts.fira-mono
+    nerd-fonts.caskaydia-cove
+    inter
+    rubik
+    ubuntu-classic
+    cantarell-fonts
+    fira-sans
+    # nunito
+    # noto-fonts
+    # noto-fonts-cjk-sans
+    # noto-fonts-emoji
+    # vazir-fonts # Persian/Arabic
   ];
 
   nix.settings.experimental-features = [

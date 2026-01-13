@@ -42,7 +42,24 @@
         };
       };
 
-      colorSchemes.predefinedScheme = "Monochrome"; # User can change this later
+      ui = {
+        fontDefault = "Rubik";
+        fontFixed = "MesloLGMDZ Nerd Font Mono";
+      };
+      location = {
+        name = "Cairo";
+        use12hourFormat = true;
+      };
+
+      appLauncher = {
+        enableClipboardHistory = true;
+      };
+
+      colorSchemes = {
+        useWallpaperColors = true;
+        predefinedScheme = "Fruit Salad"; # User can change this later
+        darkMode = true;
+      };
 
       general = {
         radiusRatio = 0.2;
