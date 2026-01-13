@@ -10,6 +10,8 @@
     ./hardware-configuration.nix
     ../../modules/system/gnome.nix
     ../../modules/system/dell-precision-7520.nix
+    ../../modules/system/gaming.nix
+    # ../../modules/system/windows-compat.nix
   ];
 
   # Latest Linux Kernel Packages
