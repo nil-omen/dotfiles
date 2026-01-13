@@ -28,5 +28,5 @@
   services.power-profiles-daemon.enable = true;
 
   # GDM integration is automatic when niri is enabled system-wide, it searches /share/wayland-sessions
-  services.xserver.displayManager.gdm.enable = true;
+  services.displayManager.gdm.enable = true;
 }

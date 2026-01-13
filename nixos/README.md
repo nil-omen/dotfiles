@@ -197,7 +197,7 @@ To enable them make sure that:
 - **Super+E**: Nautilus
 - **Super+B**: Edge
 - **Super+Z**: Zed
-- **Super+Space**: Launcher
+- **Super+D**: Launcher
 - **Super+Q**: Close Window
 
 **Notes:**

@@ -15,12 +15,14 @@
       bar = {
         density = "compact";
         position = "top";
+        showCapsule = true; # Floating "island" look
         widgets = {
           left = [
             {
               id = "ControlCenter";
               useDistroLogo = true;
             }
+            { id = "Launcher"; } # Explicit launcher button if supported, or just keep simple
             { id = "Workspace"; }
           ];
           center = [
