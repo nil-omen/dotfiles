@@ -13,6 +13,8 @@ in
 
   imports = [
     ../../modules/home/gnome.nix
+    ../../modules/home/niri.nix
+    ../../modules/home/noctalia.nix
   ];
 
   home.username = "king";

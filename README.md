@@ -37,6 +37,20 @@ The `nixos/` directory contains:
 
 **For detailed instructions, troubleshooting, and advanced configurations, see [`nixos/README.md`](nixos/README.md).**
 
+### Niri and Noctalia Shell
+The configuration now includes [Niri](https://github.com/YaLTeR/niri) (Scrollable Tiling Compositor) and [Noctalia Shell](https://github.com/noctalia-dev/noctalia-shell).
+
+**To disable Niri/Noctalia and revert to pure Gnome:**
+1. **System Config**: Comment out `../../modules/system/niri.nix` in `nixos/hosts/default/configuration.nix`.
+2. **Home Config**: Comment out `../../modules/home/niri.nix` and `../../modules/home/noctalia.nix` in `nixos/hosts/default/home.nix`.
+3. **Flake Input** (Optional): Remove `noctalia` input from `nixos/flake.nix` if you want to remove the dependency entirely (requires removing arguments from `specialArgs` too).
+
+**To disable Gnome and use only Niri:**
+1. Comment out `../../modules/system/gnome.nix` in `nixos/hosts/default/configuration.nix`.
+2. Comment out `../../modules/home/gnome.nix` in `nixos/hosts/default/home.nix`.
+*Note: GDM (Login Manager) is enabled by `niri.nix`, so disabling Gnome modules will not break login.*
+
+
 ## Traditional Linux Setup (GNU Stow)
 
 For **non-NixOS systems**, use [GNU Stow](https://www.gnu.org/software/stow/) to manage configuration files.

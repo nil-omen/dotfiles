@@ -13,6 +13,16 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =
@@ -39,7 +49,7 @@
         nixos = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {
-            inherit pkgs-unstable; # Pass unstable packages to modules
+            inherit pkgs-unstable inputs; # Pass unstable packages and inputs to modules
           };
           modules = [
             ./hosts/default/configuration.nix
@@ -47,7 +57,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit pkgs-unstable; };
+              home-manager.extraSpecialArgs = { inherit pkgs-unstable inputs; };
               home-manager.users.king = import ./hosts/default/home.nix;
               # "If you find a file blocking you, rename it to .backup and keep going."
               home-manager.backupFileExtension = "backup";

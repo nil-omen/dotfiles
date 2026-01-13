@@ -11,6 +11,7 @@
     ../../modules/system/gnome.nix
     ../../modules/system/dell-precision-7520.nix
     ../../modules/system/gaming.nix
+    ../../modules/system/niri.nix
     # ../../modules/system/windows-compat.nix
   ];
 

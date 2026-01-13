@@ -179,10 +179,31 @@ in
 ## Configuration Summary
 
 - **User:** king
-- **System:** Dell Precision 7520 + GNOME
+- **System:** Dell Precision 7520 + GNOME or NIRI+NOCTALIA
 - **Default Branch:** nixos-25.11 (Stable)
 - **Unstable Branch:** nixos-unstable (Latest)
 - **Key Packages:** Go, Rust, Python, Helix, Zed, Fish, Git
+
+## Niri and Noctalia Configuration
+I added a separate module for Niri and Noctalia, you can toggle them by commenting/uncommenting the imports in `nixos/hosts/default/configuration.nix` and `nixos/hosts/default/home.nix`.
+
+To enable them make sure that:
+1. `modules/system/niri.nix` is imported in `configuration.nix`
+2. `modules/home/niri.nix` and `modules/home/noctalia.nix` are imported in `home.nix`
+3. `pkgs-unstable` is being passed to the modules (already configured).
+
+**Shortcuts (Gnome-like):**
+- **Super+Enter**: Alacritty
+- **Super+E**: Nautilus
+- **Super+B**: Edge
+- **Super+Z**: Zed
+- **Super+Space**: Launcher
+- **Super+Q**: Close Window
+
+**Notes:**
+- Niri is configured to use the unstable package for latest features.
+- Noctalia is configured with basic widgets (Battery, WiFi, etc).
+- To revert to Gnome only, comment out the Niri/Noctalia modules and uncomment Gnome.
 
 ## Resources
 

@@ -3,6 +3,3 @@ vim/.vim/files/
 
 # Ignore Vim's file explorer history
 vim/.vim/.netrwhist
-
-# Ignore temporary files
-temp
