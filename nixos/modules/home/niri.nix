@@ -46,9 +46,12 @@ in
         };
       };
 
+      # Prefer Server-Side Decorations (SSD) - Disabled as it caused artifacts
+      prefer-no-csd = false;
+
       # Layout
       layout = {
-        gaps = 16;
+        gaps = 14;
         center-focused-column = "never";
         preset-column-widths = [
           { proportion = 0.33333; }
@@ -58,6 +61,11 @@ in
         default-column-width = {
           proportion = 0.5;
         };
+
+        # Disable decorations that break transparency
+        focus-ring.enable = false;
+        border.enable = false;
+        shadow.enable = false;
       };
 
       # Window Rules
@@ -65,6 +73,31 @@ in
         {
           matches = [ { app-id = "^noctalia-shell$"; } ];
           open-floating = true;
+        }
+        {
+          # Active Alacritty: Transparent
+          matches = [
+            {
+              app-id = "^Alacritty$";
+              is-focused = true;
+            }
+          ];
+          opacity = 0.9;
+        }
+        {
+          # Inactive Alacritty: Dimmed / More Transparent
+          matches = [
+            {
+              app-id = "^Alacritty$";
+              is-focused = false;
+            }
+          ];
+          opacity = 0.6;
+        }
+        {
+          # Zed Editor
+          matches = [ { app-id = "^dev\.zed\.Zed$"; } ];
+          opacity = 0.9;
         }
       ];
 
@@ -220,6 +253,40 @@ in
         "XF86AudioRaiseVolume".action.spawn = noctalia "volume increase";
         "XF86AudioLowerVolume".action.spawn = noctalia "volume decrease";
         "XF86AudioMute".action.spawn = noctalia "volume muteOutput";
+        "XF86AudioMicMute".action.spawn = noctalia "volume muteInput";
+
+        # --- Media Control ---
+        "XF86AudioPlay".action.spawn = [
+          "playerctl"
+          "play-pause"
+        ];
+        "XF86AudioPause".action.spawn = [
+          "playerctl"
+          "pause"
+        ];
+        "XF86AudioNext".action.spawn = [
+          "playerctl"
+          "next"
+        ];
+        "XF86AudioPrev".action.spawn = [
+          "playerctl"
+          "previous"
+        ];
+        "XF86AudioStop".action.spawn = [
+          "playerctl"
+          "stop"
+        ];
+
+        "XF86MonBrightnessUp".action.spawn = [
+          "brightnessctl"
+          "set"
+          "10%+"
+        ];
+        "XF86MonBrightnessDown".action.spawn = [
+          "brightnessctl"
+          "set"
+          "10%-"
+        ];
 
         # --- Mouse Wheel ---
         "Mod+WheelScrollDown".action.focus-workspace-down = [ ];

@@ -33,11 +33,15 @@
   # Essential Gnome Utilities that user wants to keep
   environment.systemPackages = with pkgs; [
     nautilus # File Manager
-    evince # Document Viewer
+    papers # Document Viewer
     gnome-disk-utility # Disk Management
+    baobab # Disk Usage Analyzer
     file-roller # Archive Manager
     gnome-text-editor # Simple Text Editor (Optional, user likes for small changes)
     loupe # Image Viewer (modern replacement for Eye of Gnome)
+    brightnessctl # Brightness control
+    gnome-font-viewer # Font Viewer
+    gnome-system-monitor # System Monitor
 
     # Core system tools
     libsecret # Secret management (important for auth)

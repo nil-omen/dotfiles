@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "ui_font_family": "Rubik",
   "title_bar": {
     "show_branch_icon": true,
   },
@@ -27,7 +28,7 @@
   "indent_guides": {
     "background_coloring": "indent_aware",
   },
-  "buffer_font_family": "MesloLGMDZ Nerd Font Mono",
+  "buffer_font_family": "FiraMono Nerd Font Mono",
   "telemetry": {
     "diagnostics": false,
     "metrics": false,
