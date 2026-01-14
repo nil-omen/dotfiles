@@ -29,6 +29,26 @@ in
     # PATH is usually handled automatically, but we can force some things if needed.
   };
 
+  # --- Default Applications (MimeTypes) ---
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      # Text
+      "text/plain" = "dev.zed.Zed.desktop";
+      "application/json" = "dev.zed.Zed.desktop";
+      # Documents
+      "application/pdf" = "org.gnome.Papers.desktop";
+      # Directories
+      "inode/directory" = "org.gnome.Nautilus.desktop";
+      # Web
+      "text/html" = "microsoft-edge.desktop";
+      "x-scheme-handler/http" = "microsoft-edge.desktop";
+      "x-scheme-handler/https" = "microsoft-edge.desktop";
+      "x-scheme-handler/about" = "microsoft-edge.desktop";
+      "x-scheme-handler/unknown" = "microsoft-edge.desktop";
+    };
+  };
+
   programs.niri = {
     # Ensure usage of the same package as system
     package = pkgs-unstable.niri;
@@ -121,16 +141,31 @@ in
       # Keybindings matching Gnome preferences
       binds = with config.lib.niri.actions; {
         # --- App Shortcuts ---
-        "Mod+Return".action.spawn = [ "alacritty" ];
-        "Mod+Z".action.spawn = [ "zeditor" ]; # User specific
-        "Mod+B".action.spawn = [ "microsoft-edge" ]; # User specific browser
-        "Mod+E".action.spawn = [ "nautilus" ]; # Gnome File Manager
+        "Mod+Return" = {
+          action.spawn = [ "alacritty" ];
+          hotkey-overlay.title = "Open Terminal (Alacritty)";
+        };
+        "Mod+Z" = {
+          action.spawn = [ "zeditor" ];
+          hotkey-overlay.title = "Open Editor (Zed)";
+        };
+        "Mod+B" = {
+          action.spawn = [ "microsoft-edge" ];
+          hotkey-overlay.title = "Open Browser (Edge)";
+        };
+        "Mod+E" = {
+          action.spawn = [ "nautilus" ];
+          hotkey-overlay.title = "Open File Manager (Nautilus)";
+        };
         "Mod+O".action.toggle-overview = [ ];
 
         # --- System ---
         "Mod+Q".action.close-window = [ ];
         "Mod+Shift+E".action.quit = [ ];
-        "Mod+L".action.spawn = noctalia "lockScreen lock";
+        "Mod+L" = {
+          action.spawn = noctalia "lockScreen lock";
+          hotkey-overlay.title = "Lock Screen";
+        };
         "Mod+Shift+P".action.power-off-monitors = [ ];
 
         # --- Screenshots ---
@@ -244,10 +279,27 @@ in
         "Mod+W".action.toggle-column-tabbed-display = [ ];
 
         # --- Noctalia Integration ---
-        "Mod+D".action.spawn = noctalia "launcher toggle";
-        # "Mod+Space".action.spawn = noctalia "launcher open"; # Alternatively just open
+        "Mod+D" = {
+          action.spawn = noctalia "launcher toggle";
+          hotkey-overlay.title = "Open Launcher";
+        };
+        "Mod+Ctrl+V" = {
+          action.spawn = noctalia "launcher clipboard";
+          hotkey-overlay.title = "Open Clipboard";
+        };
+        "Mod+Shift+Period" = {
+          action.spawn = noctalia "launcher emoji";
+          hotkey-overlay.title = "Open Emoji";
+        };
+        "Mod+P" = {
+          action.spawn = noctalia "sessionMenu toggle";
+          hotkey-overlay.title = "Open Session Menu";
+        };
+        "Mod+S" = {
+          action.spawn = noctalia "controlCenter toggle";
+          hotkey-overlay.title = "Open Control Center";
+        };
         "Mod+Shift+Slash".action.show-hotkey-overlay = [ ];
-        # "Mod+P".action.spawn = noctalia "sessionMenu toggle"; # Example
 
         # --- Audio ---
         "XF86AudioRaiseVolume".action.spawn = noctalia "volume increase";

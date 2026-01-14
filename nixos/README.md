@@ -205,6 +205,31 @@ To enable them make sure that:
 - Noctalia is configured with basic widgets (Battery, WiFi, etc).
 - To revert to Gnome only, comment out the Niri/Noctalia modules and uncomment Gnome.
 
+## 🎮 Gaming Configuration (Dell Precision 7520)
+
+**GPU:** Nvidia Quadro M2200 (Maxwell Architecture)
+**Drivers:** Proprietary Nvidia (via `nvidia-offload`)
+
+### ⚠️ Critical Workarounds for Maxwell GPUs
+The Quadro M2200 has incomplete support for modern Vulkan features used by DXVK. If a game crashes with `Fatal Error`, `Unreal Engine Crash`, or `Device Lost`, use the following overrides.
+
+#### 1. Force OpenGL (The "Safe Mode")
+If a game fails to launch with standard settings, force legacy OpenGL translation:
+* **Environment Variable:** `PROTON_USE_WINED3D=1`
+* **Why:** Bypasses Vulkan (DXVK) and uses stable OpenGL drivers.
+* **Trade-off:** Lower performance, but guarantees stability.
+
+#### 2. Launch Arguments
+For Unreal Engine 4/5 games, always force DirectX 11, as the card struggles with DX12 translation:
+* **Argument:** `-dx11`
+
+#### 3. Known Working Settings (Example: Octopath Traveler 2)
+* **Runner:** GE-Proton (latest)
+* **Wrapper:** `nvidia-offload`
+* **Game Args:** `-dx11 -windowed`
+* **Env Vars:** `PROTON_USE_WINED3D=1`
+* **Wine Settings:** Disable "Wine-Wayland" (Use XWayland).
+
 ## Resources
 
 **Official Documentation:**

@@ -29,6 +29,11 @@
 
     # Future Proofing: Lutris (commented out)
     # lutris
+
+    # REQUIRED tools for Winetricks/Proton to work:
+    unzip
+    cabextract
+    p7zip
   ];
 
   # Future Proofing: Steam (commented out)

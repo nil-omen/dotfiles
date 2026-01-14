@@ -47,6 +47,7 @@
     libsecret # Secret management (important for auth)
     polkit_gnome # Polkit agent
     seahorse # Keyring manager
+    playerctl # Media control utility
   ];
 
   # Use Gnome keyring for secrets
