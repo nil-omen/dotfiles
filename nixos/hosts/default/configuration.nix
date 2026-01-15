@@ -22,6 +22,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.supportedFilesystems = [
+    "ntfs"
+    "exfat"
+  ];
+
   # Networking
   # 53317: LocalSend
   # 8384: FileBrowser Plugin on KoReader on kindle (Based on Syncthing)
@@ -128,6 +133,8 @@
   #
   environment.systemPackages = with pkgs; [
     btop
+    unrar
+    p7zip
   ];
 
   # Nix LD for dynamically linked binaries (e.g., Zed, VS Code, other generic Linux apps)

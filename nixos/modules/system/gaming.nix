@@ -1,6 +1,17 @@
 { pkgs, ... }:
 
 {
+
+  # --- CachyOS-like Performance Tweaks ---
+  # 1. Enable the System76 Scheduler (improves game responsiveness/smoothness)
+  services.system76-scheduler.settings.cfsProfiles.enable = true;
+
+  # 2. Add 'mitigations=off' to kernel parameters?
+  # Only uncomment the line below if you want maximum raw FPS (like CachyOS)
+  # at the cost of slight security reduction.
+  # boot.kernelParams = [ "mitigations=off" ];
+
+
   # Core gaming setup using Heroic Games Launcher
 
   # Enable OpenGL/Vulkan support (32-bit included)
