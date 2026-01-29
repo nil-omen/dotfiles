@@ -1,3 +1,12 @@
+# Load Nix environment
+if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+    source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+end
+# Fallback for single-user installs (just in case)
+if test -e ~/.nix-profile/etc/profile.d/nix.fish
+    source ~/.nix-profile/etc/profile.d/nix.fish
+end
+
 if status is-interactive
 
     #####################
