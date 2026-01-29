@@ -6,6 +6,6 @@
 	helper = !/etc/profiles/per-user/king/bin/gh auth git-credential
 [user]
 	name = King
-	email = 24613526+R-D-King@users.noreply.github.com
+	email = 24613526+nil-omen@users.noreply.github.com
 [init]
 	defaultBranch = main
