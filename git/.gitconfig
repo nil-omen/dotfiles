@@ -9,3 +9,5 @@
 	email = 24613526+nil-omen@users.noreply.github.com
 [init]
 	defaultBranch = main
+[credential]
+	helper = !gh auth git-credential
