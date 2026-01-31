@@ -1,0 +1,14 @@
+# Stow ignore patterns for starship package
+# This allows us to keep alternative configs in git without stowing them
+# Only starship.toml will be stowed; all other .toml files are ignored
+
+# Ignore all alternative theme/config files
+My-catppuccin-powerline\.toml
+My-starshiplevel10k\.toml
+myth-colorful-pointed\.toml
+myth-orange-twoliner\.toml
+phoenix\.toml
+purple_haze\.toml
+starship_text\.toml
+starshiplevel10k\.toml
+viking\.toml

@@ -71,6 +71,7 @@ if status is-interactive
         switch (commandline -t)
         case "!"
             commandline -t $history[1]; commandline -f repaint
+                commandline -f repaint
         case "*"
             commandline -i !
         end
@@ -88,6 +89,7 @@ if status is-interactive
 
     # History helper bindings
     if [ "$fish_key_bindings" = fish_vi_key_bindings ];
+
         bind -Minsert ! __history_previous_command
         bind -Minsert '$' __history_previous_command_arguments
     else
@@ -132,8 +134,12 @@ if status is-interactive
     end
 
     # Initialize tools
+    if type -q zoxide
     if type -q zoxide; zoxide init fish | source; end
+    end
+    if type -q starship
     if type -q starship; starship init fish | source; end
+    end
 
     if type -q direnv
         direnv hook fish | source
