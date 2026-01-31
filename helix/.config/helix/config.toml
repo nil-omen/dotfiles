@@ -1,6 +1,7 @@
 # theme = "peachpuff"
 # theme = "monokai_soda"
-theme = "sonokai"
+# theme = "sonokai"
+theme = "monokai_soda_custom"
 
 [editor]
 line-number = "relative"       # "relative" makes jumping lines (e.g. '10j') much easier
