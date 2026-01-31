@@ -1,9 +1,9 @@
 [credential "https://github.com"]
 	helper = 
-	helper = !/etc/profiles/per-user/king/bin/gh auth git-credential
+	helper = !/home/king/.nix-profile/bin/gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/etc/profiles/per-user/king/bin/gh auth git-credential
+	helper = !/home/king/.nix-profile/bin/gh auth git-credential
 [user]
 	name = King
 	email = 24613526+nil-omen@users.noreply.github.com
