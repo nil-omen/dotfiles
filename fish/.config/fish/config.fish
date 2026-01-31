@@ -36,7 +36,7 @@ if status is-interactive
     end
 
     # Format man pages (requires 'bat' installed)
-    set -x MANROFFOPT "-c"
+    set -x MANROFFOPT -c
     set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
     #####################
@@ -49,9 +49,11 @@ if status is-interactive
     # FUNCTIONS         #
     #####################
 
-    # Quick Backup
     function backup --argument filename
-        cp $filename $filename.bak
+        # -r: Recursive (directories)
+        # -L: Dereference (turns symlinks into real, static files)
+        set --local target (string trim --right --chars / $filename)
+        cp -rL $target $target.bak
     end
 
     # Smart Copy
@@ -69,26 +71,27 @@ if status is-interactive
     # History Expansion (!! and !$)
     function __history_previous_command
         switch (commandline -t)
-        case "!"
-            commandline -t $history[1]; commandline -f repaint
+            case "!"
+                commandline -t $history[1]
                 commandline -f repaint
-        case "*"
-            commandline -i !
+                commandline -f repaint
+            case "*"
+                commandline -i !
         end
     end
 
     function __history_previous_command_arguments
         switch (commandline -t)
-        case "!"
-            commandline -t ""
-            commandline -f history-token-search-backward
-        case "*"
-            commandline -i '$'
+            case "!"
+                commandline -t ""
+                commandline -f history-token-search-backward
+            case "*"
+                commandline -i '$'
         end
     end
 
     # History helper bindings
-    if [ "$fish_key_bindings" = fish_vi_key_bindings ];
+    if [ "$fish_key_bindings" = fish_vi_key_bindings ]
 
         bind -Minsert ! __history_previous_command
         bind -Minsert '$' __history_previous_command_arguments
@@ -135,10 +138,14 @@ if status is-interactive
 
     # Initialize tools
     if type -q zoxide
-    if type -q zoxide; zoxide init fish | source; end
+        if type -q zoxide
+            zoxide init fish | source
+        end
     end
     if type -q starship
-    if type -q starship; starship init fish | source; end
+        if type -q starship
+            starship init fish | source
+        end
     end
 
     if type -q direnv
@@ -148,7 +155,6 @@ if status is-interactive
     # Set editor and visual
     set -gx EDITOR hx
     set -gx VISUAL hx
-
 
     #####################
     # FZF MANUAL SETUP  #
@@ -213,6 +219,6 @@ if status is-interactive
         commandline -f repaint
     end
     # Bind Ctrl+T to this new smart function
-    bind -M insert \ct fzf_smart_file_widget  # For Vi Insert Mode
-    bind \ct fzf_smart_file_widget            # For Normal/Default Mode
+    bind -M insert \ct fzf_smart_file_widget # For Vi Insert Mode
+    bind \ct fzf_smart_file_widget # For Normal/Default Mode
 end
