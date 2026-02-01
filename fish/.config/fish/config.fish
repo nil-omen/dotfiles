@@ -111,6 +111,11 @@ if status is-interactive
     abbr --add lg lazygit
     abbr --add ld lazydocker
 
+    # Colorize help pages with bat
+    # Use \-h or \--help to escape when needed (e.g., ls \-h)
+    abbr --add --position anywhere -- --help '--help 2>&1 | bat -plhelp'
+    abbr --add --position anywhere -- -h '-h 2>&1 | bat -plhelp'
+
     #####################
     # INITIALIZATION    #
     #####################
