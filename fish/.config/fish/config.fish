@@ -2,7 +2,7 @@
 if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
     source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
 end
-# Fallback for single-user installs (just in case)
+# Fallback for single-user installs
 if test -e ~/.nix-profile/etc/profile.d/nix.fish
     source ~/.nix-profile/etc/profile.d/nix.fish
 end
@@ -46,30 +46,12 @@ if status is-interactive
     set -U __done_notification_urgency_level low
 
     #####################
-    # FUNCTIONS         #
+    # HISTORY HELPERS   #
     #####################
-
-    function backup
-        for file in $argv
-            set --local target (string trim --right --chars / $file)
-            cp -rL $target $target.bak
-            echo "Backed up $target -> $target.bak"
-        end
-    end
-
-    # Smart Copy
-    function copy
-        set count (count $argv | tr -d \n)
-        if test "$count" = 2; and test -d "$argv[1]"
-            set from (echo $argv[1] | string trim --right /)
-            set to (echo $argv[2])
-            command cp -r $from $to
-        else
-            command cp $argv
-        end
-    end
-
+    
     # History Expansion (!! and !$)
+    # Kept here as they are tightly coupled to bindings
+
     function __history_previous_command
         switch (commandline -t)
             case "!"
@@ -93,7 +75,6 @@ if status is-interactive
 
     # History helper bindings
     if [ "$fish_key_bindings" = fish_vi_key_bindings ]
-
         bind -Minsert ! __history_previous_command
         bind -Minsert '$' __history_previous_command_arguments
     else
@@ -119,7 +100,7 @@ if status is-interactive
     abbr --add ll 'eza -l --color=always --group-directories-first --icons=always'
     abbr --add lt 'eza -aT --color=always --group-directories-first --icons=always'
 
-    # Git (Common workflow boosters)
+    # Git
     abbr --add gs 'git status'
     abbr --add ga 'git add .'
     abbr --add gc 'git commit -m'
@@ -127,8 +108,6 @@ if status is-interactive
 
     # Utilities
     abbr --add pstop 'ps auxf | sort -nr -k 4 | head -10'
-
-    # Tools
     abbr --add lg lazygit
     abbr --add ld lazydocker
 
@@ -136,33 +115,17 @@ if status is-interactive
     # INITIALIZATION    #
     #####################
 
-    # Greeting
-    function fish_greeting
-        # fastfetch
-    end
-
     # Initialize tools
-    if type -q zoxide
-        if type -q zoxide
-            zoxide init fish | source
-        end
-    end
-    if type -q starship
-        if type -q starship
-            starship init fish | source
-        end
-    end
-
-    if type -q direnv
-        direnv hook fish | source
-    end
+    if type -q zoxide; zoxide init fish | source; end
+    if type -q starship; starship init fish | source; end
+    if type -q direnv; direnv hook fish | source; end
 
     # Set editor and visual
     set -gx EDITOR hx
     set -gx VISUAL hx
 
     #####################
-    # FZF MANUAL SETUP  #
+    # FZF CONFIG        #
     #####################
 
     # 1. Enable FZF keybindings (Ctrl+R history, Ctrl+T files, Alt+C cd)
@@ -202,42 +165,7 @@ if status is-interactive
     # 'head -200' prevents lag on massive directories (like node_modules)
     set -gx FZF_ALT_C_OPTS "--preview 'eza --tree --level=2 --color=always {} | head -200'"
 
-    function fzf_smart_file_widget
-        # Get the current token (word) at cursor (e.g., "src/")
-        set -l token (commandline -t)
-
-        # Default settings
-        set -l search_dir "."
-        set -l query ""
-
-        # Logic: If token is a real directory, search inside it.
-        # Otherwise, use the token as the fuzzy search query.
-        if test -d "$token"
-            set search_dir "$token"
-        else
-            set query "$token"
-        end
-
-        # FIX: Define command as a LIST (no quotes around the whole line)
-        # This ensures Fish sees 'fd' as the command and the rest as arguments.
-        if type -q fd
-            set command fd --type f --hidden --follow --exclude .git . $search_dir
-        else
-            set command find $search_dir -type f
-        end
-
-        # Execute the list ($command) -> pipe to fzf
-        set -l result ($command | fzf --query "$query" --height=40% --layout=reverse --border --preview 'bat --style=numbers --color=always {}')
-
-        # If we selected something, replace the token with the result
-        if test -n "$result"
-            commandline -t -- $result
-        end
-
-        commandline -f repaint
-    end
-
-    # Bind Ctrl+T to this new smart function
+    # Bind Ctrl+T to the autoloaded function
     bind -M insert \ct fzf_smart_file_widget # For Vi Insert Mode
     bind \ct fzf_smart_file_widget # For Normal/Default Mode
 end

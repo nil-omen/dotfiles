@@ -72,3 +72,10 @@ command = "nil"
 # Optional: Configuration for NIL
 [language-server.nil.config.nil]
 formatting = { command = ["nixfmt"] }
+
+####################
+# FISH CONFIGURATION
+####################
+[[language]]
+name = "fish"
+auto-format = false
