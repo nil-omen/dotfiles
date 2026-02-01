@@ -49,11 +49,12 @@ if status is-interactive
     # FUNCTIONS         #
     #####################
 
-    function backup --argument filename
-        # -r: Recursive (directories)
-        # -L: Dereference (turns symlinks into real, static files)
-        set --local target (string trim --right --chars / $filename)
-        cp -rL $target $target.bak
+    function backup
+        for file in $argv
+            set --local target (string trim --right --chars / $file)
+            cp -rL $target $target.bak
+            echo "Backed up $target -> $target.bak"
+        end
     end
 
     # Smart Copy
@@ -127,6 +128,10 @@ if status is-interactive
     # Utilities
     abbr --add pstop 'ps auxf | sort -nr -k 4 | head -10'
 
+    # Tools
+    abbr --add lg lazygit
+    abbr --add ld lazydocker
+
     #####################
     # INITIALIZATION    #
     #####################
@@ -169,13 +174,15 @@ if status is-interactive
     # 2. Use 'fd' (if installed) instead of 'find'
     # This makes fzf much faster and respect .gitignore
     if type -q fd
+        # Default/Ctrl+T: Files only
         set -gx FZF_DEFAULT_COMMAND 'fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
         set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+
+        # Alt+C: Directories only (makes Alt+C much faster)
+        set -gx FZF_ALT_C_COMMAND 'fd --type d --strip-cwd-prefix --hidden --follow --exclude .git'
     end
 
-    # 3. Visual Styling (Matches your modern setup)
-    # layout=reverse: Search bar at top, lists down
-    # border: Adds a nice border
+    # 3. Visual Styling
     set -gx FZF_DEFAULT_OPTS "
         --layout=reverse
         --border
@@ -184,6 +191,17 @@ if status is-interactive
         --preview-window 'right:60%'
         --bind 'ctrl-/:toggle-preview'
     "
+
+    # 4. Specific Overrides
+
+    # HISTORY (Ctrl+R): No preview
+    set -gx FZF_CTRL_R_OPTS "--preview-window=hidden"
+
+    # DIRECTORIES (Alt+C): Preview with Eza Tree
+    # Shows a tree view of the folder content. 
+    # 'head -200' prevents lag on massive directories (like node_modules)
+    set -gx FZF_ALT_C_OPTS "--preview 'eza --tree --level=2 --color=always {} | head -200'"
+
     function fzf_smart_file_widget
         # Get the current token (word) at cursor (e.g., "src/")
         set -l token (commandline -t)
@@ -218,6 +236,7 @@ if status is-interactive
 
         commandline -f repaint
     end
+
     # Bind Ctrl+T to this new smart function
     bind -M insert \ct fzf_smart_file_widget # For Vi Insert Mode
     bind \ct fzf_smart_file_widget # For Normal/Default Mode
