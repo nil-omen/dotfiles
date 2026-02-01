@@ -44,7 +44,7 @@
 "type.builtin" = "pink"
 
 ## Variables
-"variable"  = "white"
+"variable" = "white"
 "variable.builtin" = "pink"
 "variable.other.member" = "white"
 "variable.parameter" = "softorange"
@@ -73,7 +73,8 @@
 # Editor UI
 
 ## Main
-"ui.background" = { bg = "background" }
+# "ui.background" = { bg = "background" }
+"ui.background" = {}
 "ui.text" = "white"
 "ui.window" = { bg = "darkgray" }
 
@@ -93,7 +94,10 @@
 "ui.cursor.primary" = { fg = "white", modifiers = ["reversed"] }
 "ui.cursor.match" = { fg = "white", modifiers = ["reversed"] }
 "ui.selection" = { bg = "darkgray" }
-"ui.cursorline.primary" = { bg = "black" }
+# "ui.cursorline.primary" = { bg = "black" }
+"ui.cursorline.primary" = { fg = "softorange", bg = "lightgray", modifiers = [
+    "bold",
+] }
 
 ## Statusline
 "ui.statusline" = { bg = "darkgray" }
@@ -116,6 +120,7 @@
 "white" = "#cfcfc2"
 "gray" = "#75715e"
 "darkgray" = "#444444"
+"lightgray" = "#333333"
 "black" = "#222222"
 "blue" = "#66d9ef"
 "green" = "#a6e22e"
