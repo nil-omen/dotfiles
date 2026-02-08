@@ -11,17 +11,13 @@ function project_picker --description "Switch to a project directory in Zellij"
     end
 
     # Get all projects with zoxide scores, sorted by frecency
-    # Use fd to get top-level directories, then query zoxide for each
-    # The 'string match -r /' filter ensures we only get paths with subdirectories (matching reference's grep /)
+    # Query all zoxide entries (already sorted by score), filter to projects dir
+    set -l projects_expanded (string replace '~' $HOME $projects_dir)
     set -l results (
-        fd --type d --max-depth 1 --base-directory $projects_dir |
-        while read dir
-            zoxide query -l -s "$projects_dir/$dir/" 2>/dev/null
-        end |
-        string replace -a "$projects_dir/" "" |
-        string match -r '/' |
-        sort -rnk1 |
-        uniq
+        zoxide query -l -s 2>/dev/null |
+        rg "$projects_expanded/" |
+        string replace -a "$projects_expanded/" "" |
+        string match -rv "^\s*[\d.]+\s*\$"
     )
 
     # If no results from zoxide, fall back to fd listing with zero scores
