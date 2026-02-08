@@ -177,4 +177,12 @@ if status is-interactive
     # Bind Ctrl+T to the autoloaded function
     bind -M insert \ct fzf_smart_file_widget # For Vi Insert Mode
     bind \ct fzf_smart_file_widget # For Normal/Default Mode
+
+    #####################
+    # PROJECT PICKER    #
+    #####################
+    # Alt+p: Direct project picker (for use outside Zellij)
+    # Inside Zellij, use Ctrl+o then 'o' to open in floating pane
+    bind -M insert \ep project_picker
+    bind \ep project_picker
 end
