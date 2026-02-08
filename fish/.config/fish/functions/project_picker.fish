@@ -5,20 +5,21 @@ function project_picker --description "Switch to a project directory in Zellij"
 
     # Check if ~/projects exists
     if not test -d $projects_dir
-        echo "Error: ~/projects directory doesn't exist"
+        echo "Error: ~/projects directory doesn't exist" >&2
+        commandline -f repaint
         return 1
     end
 
     # Get all projects with zoxide scores, sorted by frecency
     # Use fd to get top-level directories, then query zoxide for each
+    # The 'string match -r /' filter ensures we only get paths with subdirectories (matching reference's grep /)
     set -l results (
         fd --type d --max-depth 1 --base-directory $projects_dir |
         while read dir
             zoxide query -l -s "$projects_dir/$dir/" 2>/dev/null
         end |
         string replace -a "$projects_dir/" "" |
-        string match -rv "^$projects_dir\$" |
-        string match -rv '^\s*[\d.]*\s*$' |
+        string match -r '/' |
         sort -rnk1 |
         uniq
     )
@@ -30,7 +31,8 @@ function project_picker --description "Switch to a project directory in Zellij"
 
     # If still nothing, exit
     if test -z "$results"
-        echo "No projects found in ~/projects"
+        echo "No projects found in ~/projects" >&2
+        commandline -f repaint
         return 1
     end
 
@@ -65,8 +67,9 @@ function project_picker --description "Switch to a project directory in Zellij"
             --preview-window=right:50%)
     end
 
-    # If nothing selected, exit
+    # If nothing selected, exit and repaint
     if test -z "$selected"
+        commandline -f repaint
         return 0
     end
 
@@ -78,9 +81,11 @@ function project_picker --description "Switch to a project directory in Zellij"
     # Check if we're inside Zellij
     if not set -q ZELLIJ
         cd "$project_path"
+        commandline -f repaint
         return 0
     end
 
     # Create a new Zellij tab with the project name
     zellij action new-tab --layout default --name "$selected" --cwd "$project_path"
+    commandline -f repaint
 end
