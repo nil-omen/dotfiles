@@ -116,6 +116,10 @@ if status is-interactive
     abbr --add --position anywhere -- --help '--help 2>&1 | bat -plhelp'
     abbr --add --position anywhere -- -h '-h 2>&1 | bat -plhelp'
 
+
+    # Force sudo to use the current user's helix path
+    abbr --add suhx 'sudo (which hx)'
+
     #####################
     # INITIALIZATION    #
     #####################
