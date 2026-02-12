@@ -30,16 +30,17 @@ A script is provided to automate the installation of dependencies and plugins.
 ## Features
 
 ### Plugins
-- **Syntax Highlighting**: Commands are highlighted as you type.
-- **Autosuggestions**: Grey suggestions based on history (accept with Right Arrow).
+- **Fast Syntax Highlighting**: Commands are highlighted as you type (replaced standard `zsh-syntax-highlighting` for better performance/compatibility).
+- **Autocomplete**: Real-time type-ahead autocompletion and history menu (replaced manual `compinit`).
+- **Autosuggestions**: Grey suggestions based on history.
 - **History Substring Search**: Type part of a command and use Up/Down arrows to search history.
 - **Sudo**: Press `Esc` twice to prepend `sudo` to the current command.
-- **Auto Notify**: Get notifications when long-running commands finish (replacing `done.fish`).
+- **Auto Notify**: Get notifications when long-running commands finish.
 
 ### Custom Widgets & Keybindings
 | Keybinding | Function | Description |
 | :--- | :--- | :--- |
-| `Alt + p` | `project_picker` | Quickly switch to projects in `~/projects`. Opens new tab in Zellij. |
+| `Alt + p` | `project_picker` | Quickly switch to projects in `~/projects` (sorted by frecency using `zoxide` + `rg`). |
 | `Ctrl + t` | `fzf_smart_file_widget` | Smart file search using `fd` and `fzf`, inserts file path at cursor. |
 | `Ctrl + r` | `fzf-history` | Search command history interactively. |
 | `Alt + c` | `fzf-cd` | Search directories and `cd` into them. |
@@ -61,6 +62,7 @@ A script is provided to automate the installation of dependencies and plugins.
 Ensure these are installed (the script tries to install them):
 - `fzf`
 - `zoxide`
+- `just` (Command runner, completions auto-generated)
 - `starship` (Prompt)
 - `bat` (Cat clone with syntax highlighting)
 - `eza` (Ls clone)

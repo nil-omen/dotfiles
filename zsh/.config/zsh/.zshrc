@@ -10,6 +10,9 @@
 # Plugin directory
 ZPLUGINDIR="$ZDOTDIR/plugins"
 
+# Add custom functions and completions to fpath BEFORE initializing plugins or completion
+fpath=("$ZDOTDIR/functions" "$ZDOTDIR/completions" $fpath)
+
 # Helper function to source plugins if they exist
 function source_plugin() {
     local plugin_name="$1"
@@ -95,25 +98,15 @@ setopt PUSHD_IGNORE_DUPS         # Don't push multiple copies of the same direct
 # 4. COMPLETION
 # ------------------------------------------------------------------------------
 
-autoload -Uz compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case insensitive
-# Speed up completion with cache
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$ZDOTDIR/.zcompcache"
-
-if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-  compinit -d "$ZDOTDIR/.zcompdump"
-else
-  compinit -C -d "$ZDOTDIR/.zcompdump"
-fi
+# standard compinit is handled by zsh-autocomplete
+# autoload -Uz compinit
+# ... removed manual compinit ...
 
 # ------------------------------------------------------------------------------
 # 5. FUNCTIONS & WIDGETS
 # ------------------------------------------------------------------------------
 
 # Load custom functions
-fpath=("$ZDOTDIR/functions" "$ZDOTDIR/completions" $fpath)
 autoload -Uz backup copy gh-create project_picker fzf_smart_file_widget
 
 # ------------------------------------------------------------------------------

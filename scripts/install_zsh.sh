@@ -147,6 +147,13 @@ if [[ "$PLUGINS_ONLY" == "false" ]]; then
     fi
 fi
 
+# 4. Post-Setup
+mkdir -p "$CONFIG_DIR/completions"
+if command -v just &> /dev/null; then
+    echo ">> Generating just completions..."
+    just --completions zsh > "$CONFIG_DIR/completions/_just"
+fi
+
 echo ">> Setup Complete!"
 if [[ "$PLUGINS_ONLY" == "true" ]]; then
     echo ">> Plugins updated. System dependencies and dotfile linking were skipped."
