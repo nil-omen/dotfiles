@@ -4,6 +4,7 @@
 
 # Ignore all alternative theme/config files
 My-catppuccin-powerline\.toml
+My-minimal10k\.toml
 My-starshiplevel10k\.toml
 myth-colorful-pointed\.toml
 myth-orange-twoliner\.toml
