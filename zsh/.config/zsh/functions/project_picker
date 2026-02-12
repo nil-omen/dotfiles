@@ -1,0 +1,57 @@
+# project_picker Zsh Widget Body
+# Ported from Fish config
+
+local projects_dir="$HOME/projects"
+
+if [[ ! -d "$projects_dir" ]]; then
+    echo "Error: ~/projects directory doesn't exist" >&2
+    zle reset-prompt
+    return 1
+fi
+
+# Get results using zoxide and rg
+# We use zoxide query -l -s (list with scores)
+local results
+results=$(zoxide query -l -s 2>/dev/null | rg "$projects_dir/" | sed "s|$projects_dir/||" | awk '$1 !~ /^[0-9.]+$/ {print $0}')
+
+# If empty, fallback to fd
+if [[ -z "$results" ]]; then
+    results=$(fd --type d --max-depth 1 --base-directory "$projects_dir" | awk '{print "0.0 " $0}')
+fi
+
+if [[ -z "$results" ]]; then
+    echo "No projects found in ~/projects" >&2
+    zle reset-prompt
+    return 1
+fi
+
+local selected=""
+
+# Interactive FZF
+selected=$(echo "$results" | awk '{print $2}' | fzf \
+    --no-sort \
+    --select-1 \
+    --prompt="  " \
+    --height=40% \
+    --border \
+    --preview="eza --tree --level=2 --color=always $projects_dir/{} 2>/dev/null || ls -la $projects_dir/{}" \
+    --preview-window=right:50%)
+
+if [[ -z "$selected" ]]; then
+    zle reset-prompt
+    return 0
+fi
+
+local project_path="$projects_dir/$selected"
+
+# Update zoxide
+zoxide add "$project_path"
+
+# Check Zellij
+if [[ -n "$ZELLIJ" ]]; then
+    zellij action new-tab --layout default --name "$selected" --cwd "$project_path"
+else
+    cd "$project_path"
+fi
+
+zle reset-prompt

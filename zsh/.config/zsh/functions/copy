@@ -1,0 +1,10 @@
+#!/bin/zsh
+# copy function
+count=$(echo -n "$@" | wc -w)
+if [[ "$count" -eq 2 && -d "$1" ]]; then
+    from="${1%%/}"
+    to="$2"
+    cp -r "$from" "$to"
+else
+    cp "$@"
+fi

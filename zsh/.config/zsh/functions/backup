@@ -1,0 +1,7 @@
+#!/bin/zsh
+# backup function
+for file in "$@"; do
+    target="${file%%/}"
+    cp -rL "$target" "$target.bak"
+    echo "Backed up $target -> $target.bak"
+done

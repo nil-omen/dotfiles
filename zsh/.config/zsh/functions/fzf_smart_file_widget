@@ -1,0 +1,44 @@
+# fzf_smart_file_widget Zsh Widget Body
+# Ported from Fish config
+
+# Get the current token (word) at cursor
+# In Zsh, we can use $LBUFFER and identify the word before cursor.
+
+local token=""
+
+# match everything not a space at the end of LBUFFER
+if [[ "$LBUFFER" =~ ([^[:space:]]+)$ ]]; then
+    token="${match[1]}"
+fi
+
+local search_dir="."
+local query=""
+
+if [[ -n "$token" && -d "$token" ]]; then
+    search_dir="$token"
+else
+    query="$token"
+fi
+
+local cmd_str=""
+if command -v fd &> /dev/null; then
+    cmd_str="fd --type f --hidden --follow --exclude .git . $search_dir"
+else
+    cmd_str="find $search_dir -type f"
+fi
+
+# Run FZF
+# We use sh -c to execute the command string in the pipeline
+local result
+result=$(eval "$cmd_str" | fzf --query "$query" --height=40% --layout=reverse --border --preview 'bat --style=numbers --color=always {}')
+
+if [[ -n "$result" ]]; then
+    # Replace the token with the result
+    # If we had a token, we remove it from LBUFFER and append the result.
+    if [[ -n "$token" ]]; then
+        LBUFFER="${LBUFFER%$token}"
+    fi
+    LBUFFER="${LBUFFER}${result}"
+fi
+
+zle redisplay
