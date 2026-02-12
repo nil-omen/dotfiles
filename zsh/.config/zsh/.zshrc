@@ -113,7 +113,7 @@ fi
 # ------------------------------------------------------------------------------
 
 # Load custom functions
-fpath=("$ZDOTDIR/functions" $fpath)
+fpath=("$ZDOTDIR/functions" "$ZDOTDIR/completions" $fpath)
 autoload -Uz backup copy gh-create project_picker fzf_smart_file_widget
 
 # ------------------------------------------------------------------------------
