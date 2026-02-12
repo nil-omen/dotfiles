@@ -11,9 +11,24 @@ CONFIG_DIR="$ZSH_PACKAGE_DIR/.config/zsh"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 FUNCTIONS_DIR="$CONFIG_DIR/functions"
 
+# Parse arguments
+PLUGINS_ONLY=false
+
+for arg in "$@"; do
+    case $arg in
+        --plugins-only)
+            PLUGINS_ONLY=true
+            shift
+            ;;
+        *)
+            ;;
+    esac
+done
+
 echo ">> Starting Zsh Setup..."
 
 # 0. Restructure (Quick migration if old structure exists)
+# We run this even in plugins-only mode to ensure the directory structure exists for plugins
 if [[ -f "$ZSH_PACKAGE_DIR/.zshrc" ]]; then
     echo ">> Migrating to clean structure (moving files to .config/zsh)..."
     mkdir -p "$CONFIG_DIR"
@@ -41,40 +56,60 @@ fi
 mkdir -p "$PLUGIN_DIR"
 mkdir -p "$FUNCTIONS_DIR"
 
-# 1. Install Dependencies
-echo ">> Checking Dependencies..."
+if [[ "$PLUGINS_ONLY" == "false" ]]; then
+    # 1. Install Dependencies
+    echo ">> Checking Dependencies..."
 
-install_pkg() {
-    local pkg_name="$1"
-    # Detect package manager
-    if command -v nix-env &> /dev/null; then
-         if ! command -v "$pkg_name" &> /dev/null; then
-            echo "Installing $pkg_name via Nix..."
-            nix-env -iA "nixos.$pkg_name" || echo "Warning: Failed to install $pkg_name with Nix"
-         fi
-    elif command -v dnf &> /dev/null; then
-        if ! rpm -q "$pkg_name" &> /dev/null; then
-             echo "Installing $pkg_name via DNF..."
-             sudo dnf install -y "$pkg_name"
+    install_pkg() {
+        local pkg_name="$1"
+        # Detect package manager - Prioritize Native (DNF/Apt) over Nix
+        if command -v dnf &> /dev/null; then
+            if ! rpm -q "$pkg_name" &> /dev/null; then
+                 echo "Installing $pkg_name via DNF..."
+                 sudo dnf install -y "$pkg_name" || echo "Warning: Failed to install $pkg_name"
+            fi
+        elif command -v apt &> /dev/null; then
+            if ! dpkg -l | grep -q "$pkg_name"; then
+                 echo "Installing $pkg_name via Apt..."
+                 sudo apt update && sudo apt install -y "$pkg_name" || echo "Warning: Failed to install $pkg_name"
+            fi
+        elif command -v nix-env &> /dev/null; then
+             if ! command -v "$pkg_name" &> /dev/null; then
+                echo "Installing $pkg_name via Nix..."
+                nix-env -iA "nixos.$pkg_name" || echo "Warning: Failed to install $pkg_name with Nix"
+             fi
+        else
+            echo "Warning: No supported package manager found. Please manually install $pkg_name."
         fi
-    elif command -v apt &> /dev/null; then
-        if ! dpkg -l | grep -q "$pkg_name"; then
-             echo "Installing $pkg_name via Apt..."
-             sudo apt update && sudo apt install -y "$pkg_name"
-        fi
+    }
+
+    install_pkg zsh
+    install_pkg stow
+    install_pkg fzf
+    install_pkg zoxide
+    install_pkg bat
+    install_pkg ripgrep
+    install_pkg fd-find 
+    
+    # Try eza, fallback to exa, or just warn (handle dnf failure gracefully)
+    if command -v dnf &> /dev/null; then
+         # Fedora sometimes has eza, sometimes not, or it might be named differently
+         install_pkg eza || echo "Trying exa..." && install_pkg exa || echo "Warning: Could not install eza/exa."
     else
-        echo "Warning: No supported package manager found. Please manually install $pkg_name."
+         install_pkg eza
     fi
-}
 
-install_pkg zsh
-install_pkg stow
-install_pkg fzf
-install_pkg zoxide
-install_pkg bat
-install_pkg eza
-install_pkg ripgrep
-install_pkg fd-find 
+    # Notifications (for zsh-auto-notify)
+    if command -v apt &> /dev/null; then
+        install_pkg libnotify-bin
+        install_pkg notification-daemon
+    elif command -v dnf &> /dev/null; then
+        install_pkg libnotify
+        install_pkg notification-daemon || true # notification-daemon might be named differently or not strictly needed if another daemon is running
+    elif command -v nix-env &> /dev/null; then
+        install_pkg libnotify
+    fi 
+fi
 
 # 2. Setup Plugins
 echo ">> Setting up Plugins..."
@@ -91,23 +126,30 @@ clone_plugin() {
     fi
 }
 
-clone_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+clone_plugin "zsh-fast-syntax-highlighting" "https://github.com/zdharma-continuum/fast-syntax-highlighting.git"
+clone_plugin "zsh-autocomplete" "https://github.com/marlonrichert/zsh-autocomplete.git"
 clone_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions.git"
 clone_plugin "zsh-history-substring-search" "https://github.com/zsh-users/zsh-history-substring-search.git"
 clone_plugin "zsh-sudo" "https://github.com/hcgraf/zsh-sudo.git"
 clone_plugin "zsh-auto-notify" "https://github.com/MichaelAquilina/zsh-auto-notify.git"
 
 
-# 3. Stow Dotfiles
-echo ">> Linking Dotfiles with Stow..."
-if command -v stow &> /dev/null; then
-    cd "$DOTFILES_DIR"
-    # Stow 'zsh' package
-    stow -v -R zsh
-else
-    echo "Error: stow is not available."
-    exit 1
+if [[ "$PLUGINS_ONLY" == "false" ]]; then
+    # 3. Stow Dotfiles
+    echo ">> Linking Dotfiles with Stow..."
+    if command -v stow &> /dev/null; then
+        cd "$DOTFILES_DIR"
+        # Stow 'zsh' package
+        stow -v -R zsh
+    else
+        echo "Error: stow is not available."
+        exit 1
+    fi
 fi
 
 echo ">> Setup Complete!"
-echo ">> Please restart your shell or run 'zsh' to see changes."
+if [[ "$PLUGINS_ONLY" == "true" ]]; then
+    echo ">> Plugins updated. System dependencies and dotfile linking were skipped."
+else
+    echo ">> Please restart your shell or run 'zsh' to see changes."
+fi

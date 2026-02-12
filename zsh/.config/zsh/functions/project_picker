@@ -2,6 +2,7 @@
 # Ported from Fish config
 
 local projects_dir="$HOME/projects"
+local ratio_threshold=3
 
 if [[ ! -d "$projects_dir" ]]; then
     echo "Error: ~/projects directory doesn't exist" >&2
@@ -9,12 +10,17 @@ if [[ ! -d "$projects_dir" ]]; then
     return 1
 fi
 
-# Get results using zoxide and rg
-# We use zoxide query -l -s (list with scores)
-local results
-results=$(zoxide query -l -s 2>/dev/null | rg "$projects_dir/" | sed "s|$projects_dir/||" | awk '$1 !~ /^[0-9.]+$/ {print $0}')
+# Get all projects with zoxide scores, sorted by frecency
+# Query all zoxide entries (already sorted by score), filter to projects dir
+# We use a slightly different sed/awk approach to emulate the fish logic
+# Fish: zoxide query -l -s | rg ... | string replace ... | string match -rv ...
 
-# If empty, fallback to fd
+local projects_expanded="${projects_dir/#$HOME/~}"
+# We need to list everything, then filter.
+# zoxide query -l -s returns "score path"
+results=$(zoxide query -l -s 2>/dev/null | rg "$projects_dir/" | sed "s|$projects_dir/||" | rg -v "^[[:space:]]*[0-9.]+[[:space:]]*$")
+
+# If no results from zoxide, fall back to fd listing with zero scores
 if [[ -z "$results" ]]; then
     results=$(fd --type d --max-depth 1 --base-directory "$projects_dir" | awk '{print "0.0 " $0}')
 fi
@@ -26,11 +32,37 @@ if [[ -z "$results" ]]; then
 fi
 
 local selected=""
+local query="" # we don't really pass arguments to widgets easily in this flow
+
+# If (future) we support query:
+# if [[ -n "$query" ]]; then ... logic ... fi
 
 # Interactive FZF
+# Fish used: --no-sort (preserving zoxide order)
+# Fish: awk '{print $2}' to strip score before passing to fzf? 
+# Wait, fish version: `set filtered (printf '%s\n' $results | fzf --no-sort ...)`
+# $results in fish contained lines like "score path". 
+# Actually, fish `string replace` cleaned it up? 
+# Fish line 19: `string replace -a "$projects_expanded/" ""` -> removes prefix.
+# Fish line 20: `string match -rv "^\s*[\d.]+\s*\$"` -> remove lines that are ONLY numbers? No, that regex is weird.
+# Ah, `zoxide query -l -s` output is `score path`.
+# Fish script then strips the path prefix. So we have `score relative_path`.
+# Then `fzf` receives this?
+# In fish: `awk '{print $2}' | fzf` -> this pipes ONLY the path to fzf. 
+# BUT `filtered` assignment in Fish (line 39) pipes `$results` DIRECTLY to fzf?
+# Wait, Fish line 55: `set selected (printf '%s\n' $results | awk '{print $2}' | fzf ...)`
+# So FZF only sees the names, not scores.
+# The `zoxide query -l` returns sorted results (highest score first).
+# So passing `--no-sort` to FZF keeps that order.
+
+# Our Zsh logic:
+# `results` contains `score relative_path` lines.
+# We want to pipe only `relative_path` to FZF.
+
 selected=$(echo "$results" | awk '{print $2}' | fzf \
     --no-sort \
     --select-1 \
+    --query="$query" \
     --prompt="  " \
     --height=40% \
     --border \
@@ -44,7 +76,7 @@ fi
 
 local project_path="$projects_dir/$selected"
 
-# Update zoxide
+# Update zoxide logic
 zoxide add "$project_path"
 
 # Check Zellij

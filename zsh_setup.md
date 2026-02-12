@@ -10,7 +10,12 @@ A script is provided to automate the installation of dependencies and plugins.
     ```bash
     ~/dotfiles/scripts/install_zsh.sh
     ```
+    To update/install plugins *only* (skipping system packages), run:
+    ```bash
+    ~/dotfiles/scripts/install_zsh.sh --plugins-only
+    ```
     This script will:
+
     - Install `zsh`, `stow`, `fzf`, `zoxide`, `bat`, `eza`, `ripgrep`, `fd`.
     - Clone necessary Zsh plugins to `~/dotfiles/zsh/plugins`.
     - Run `stow zsh` to link configuration files to your home directory.
@@ -61,3 +66,4 @@ Ensure these are installed (the script tries to install them):
 - `eza` (Ls clone)
 - `ripgrep` (Rg)
 - `fd` (Find clone)
+- `libnotify` / `notify-send` (For auto-notify plugin)

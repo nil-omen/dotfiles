@@ -22,11 +22,32 @@ function source_plugin() {
 }
 
 # Source Plugins
-source_plugin "zsh-syntax-highlighting" "zsh-syntax-highlighting.zsh"
-source_plugin "zsh-autosuggestions" "zsh-autosuggestions.zsh"
-source_plugin "zsh-history-substring-search" "zsh-history-substring-search.zsh"
-source_plugin "zsh-sudo" "sudo.plugin.zsh"
-source_plugin "zsh-auto-notify" "auto-notify.plugin.zsh"
+# Source Plugins
+# Manually source plugins from our directory
+
+# Autocomplete (Should be loaded early)
+if [[ -f "$ZPLUGINDIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]]; then
+    source "$ZPLUGINDIR/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+fi
+
+if [[ -f "$ZPLUGINDIR/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "$ZPLUGINDIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+
+if [[ -f "$ZPLUGINDIR/zsh-history-substring-search/zsh-history-substring-search.zsh" ]]; then
+    source "$ZPLUGINDIR/zsh-history-substring-search/zsh-history-substring-search.zsh"
+fi
+
+if [[ -f "$ZPLUGINDIR/zsh-sudo/sudo.plugin.zsh" ]]; then
+    source "$ZPLUGINDIR/zsh-sudo/sudo.plugin.zsh"
+fi
+
+# zsh-auto-notify requires notify-send
+if command -v notify-send &> /dev/null; then
+    if [[ -f "$ZPLUGINDIR/zsh-auto-notify/auto-notify.plugin.zsh" ]]; then
+        source "$ZPLUGINDIR/zsh-auto-notify/auto-notify.plugin.zsh"
+    fi
+fi
 
 # ------------------------------------------------------------------------------
 # 2. PROMPT & TOOLS
@@ -127,3 +148,11 @@ bindkey '^[p' project_picker
 if [[ -f "$ZDOTDIR/aliases.zsh" ]]; then
     source "$ZDOTDIR/aliases.zsh"
 fi
+
+# ------------------------------------------------------------------------------
+# 8. SYNTAX HIGHLIGHTING (MUST BE LAST)
+# ------------------------------------------------------------------------------
+if [[ -f "$ZPLUGINDIR/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" ]]; then
+    source "$ZPLUGINDIR/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+fi
+
