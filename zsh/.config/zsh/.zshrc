@@ -116,11 +116,6 @@ autoload -Uz backup copy gh-create project_picker fzf_smart_file_widget
 # Set Vi mode (optional, but requested implicitly by "same workflow as fish" if fish was vi-mode. 
 bindkey -e # Default to Emacs mode for now.
 
-# History Substring Search (Up/Down) via plugin
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
 
 # FZF History (Ctrl+R) - Standard fzf binding
 if command -v fzf &> /dev/null; then
