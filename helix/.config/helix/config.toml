@@ -6,7 +6,7 @@ theme = "monokai_soda_custom"
 [editor]
 line-number = "relative"       # "relative" makes jumping lines (e.g. '10j') much easier
 mouse = true                   # Keeps mouse support enabled (default is true, but good to be explicit)
-scrolloff = 10                 # Keeps 10 lines of padding above/below cursor when scrolling
+scrolloff = 5                  # Keeps 5 lines of padding above/below cursor when scrolling
 cursorline = true              # Highlights the line the cursor is currently on
 true-color = true              # Forces true color support
 bufferline = "multiple"        # Shows open buffers (tabs) at the top when multiple files are open
