@@ -140,7 +140,7 @@ format = '[$symbol ]($style)(fg:overlay0 bg:surface0)'
 
 [mise]
 disabled = false
-symbol = " "
+symbol = "󰭼 "
 style = "fg:text bg:surface0"
 format = '[$symbol ]($style)(fg:overlay0 bg:surface0)'
 
