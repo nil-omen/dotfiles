@@ -17,7 +17,7 @@ $fill\
 
 $status\
 $cmd_duration\
-$c$golang$java$nodejs$python$rust$nix_shell\
+$c$golang$java$nodejs$bun$python$rust$nix_shell$mise\
 \n$character"""
 
 add_newline = false
@@ -76,8 +76,6 @@ symbol = "🥋 "
 style = "fg:sapphire"
 format = '[ $symbol$output]($style)'
 
-# FIX 2: Added ' ++ " "' at the end of the template
-# This forces the space to be part of the colored output
 command = '''
 jj log --revisions @ --no-graph --ignore-working-copy --color always --limit 1 --template '
   separate(" ",
@@ -99,7 +97,7 @@ jj log --revisions @ --no-graph --ignore-working-copy --color always --limit 1 -
 ' | tr -d '\n'
 '''
 
-# --- LANGUAGES ---
+# --- LANGUAGES & ENVIRONMENTS ---
 [c]
 symbol = ""
 style = "fg:text bg:surface0"
@@ -116,7 +114,12 @@ style = "fg:blue bg:surface0"
 format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 [nodejs]
-symbol = ""
+symbol = "󰎙"
+style = "fg:blue bg:surface0"
+format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
+
+[bun]
+symbol = ""
 style = "fg:blue bg:surface0"
 format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
@@ -133,6 +136,12 @@ format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 [nix_shell]
 symbol = " "
 style = "fg:blue bg:surface0"
+format = '[$symbol ]($style)(fg:overlay0 bg:surface0)'
+
+[mise]
+disabled = false
+symbol = " "
+style = "fg:text bg:surface0"
 format = '[$symbol ]($style)(fg:overlay0 bg:surface0)'
 
 # --- SYSTEM MODULES ---
