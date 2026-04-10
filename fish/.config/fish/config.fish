@@ -22,12 +22,12 @@ if status is-interactive
     #####################
 
     # Add custom paths
-    fish_add_path ~/.local/bin
-    fish_add_path ~/.cargo/bin
-    fish_add_path ~/go/bin
-    fish_add_path /usr/local/go/bin
-    fish_add_path /opt/nvim-linux-x86_64/bin
-    fish_add_path ~/Applications/depot_tools
+    fish_add_path -g ~/.local/bin
+    fish_add_path -g ~/.cargo/bin
+    fish_add_path -g ~/go/bin
+    fish_add_path -g /usr/local/go/bin
+    fish_add_path -g /opt/nvim-linux-x86_64/bin
+    fish_add_path -g ~/Applications/depot_tools
 
     # NixOS Specific: Allow unfree packages (e.g., for 'nix run')
     # The check ensures this only runs on NixOS, ignoring CachyOS/Arch
@@ -42,8 +42,8 @@ if status is-interactive
     #####################
     # SETTINGS: "DONE"  #
     #####################
-    set -U __done_min_cmd_duration 10000
-    set -U __done_notification_urgency_level low
+    set -g __done_min_cmd_duration 10000
+    set -g __done_notification_urgency_level low
 
     #####################
     # HISTORY HELPERS   #
