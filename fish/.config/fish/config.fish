@@ -125,6 +125,7 @@ if status is-interactive
     #####################
 
     # Initialize tools
+    if type -q devbox; devbox global shellenv --init-hook | source; end
     if type -q mise; mise activate fish | source; end
     if type -q zoxide; zoxide init fish | source; end
     if type -q starship; starship init fish | source; end
