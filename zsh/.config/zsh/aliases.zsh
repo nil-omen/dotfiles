@@ -7,10 +7,11 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # Eza (LS replacement)
+export EZA_STANDARD_IGNORE=".git|.jj|.direnv"
 alias ls='eza -al --color=always --group-directories-first --icons=always'
 alias la='eza -a --color=always --group-directories-first --icons=always'
 alias ll='eza -l --color=always --group-directories-first --icons=always'
-alias lt='eza -aT --color=always --group-directories-first --icons=always'
+alias lt='eza -aT --color=always --group-directories-first --icons=always -I "$EZA_STANDARD_IGNORE"'
 
 # Git
 alias gs='git status'

@@ -95,10 +95,11 @@ if status is-interactive
 
     # Eza (LS replacement)
     # Using 'abbr' means when you type 'll', it expands to the full eza command
+    set -gx EZA_STANDARD_IGNORE ".git|.jj|.direnv"
     abbr --add ls 'eza -al --color=always --group-directories-first --icons=always'
     abbr --add la 'eza -a --color=always --group-directories-first --icons=always'
     abbr --add ll 'eza -l --color=always --group-directories-first --icons=always'
-    abbr --add lt 'eza -aT --color=always --group-directories-first --icons=always'
+    abbr --add lt 'eza -aT --color=always --group-directories-first --icons=always -I "$EZA_STANDARD_IGNORE"'
 
     # Git
     abbr --add gs 'git status'
