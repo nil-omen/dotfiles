@@ -1,0 +1,2 @@
+# Ignore the jj repos directory so Stow doesn't symlink it
+\.config/jj/repos

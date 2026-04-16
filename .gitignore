@@ -4,3 +4,7 @@ vim/.vim/files/
 # Ignore Vim's file explorer history
 vim/.vim/.netrwhist
 **/fish_variables.*
+
+
+# Ignore jj repo info
+jj/.config/jj/repos/
