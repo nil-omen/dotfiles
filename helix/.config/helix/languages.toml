@@ -29,6 +29,17 @@ command = "rust-analyzer"
 [language-server.rust-analyzer.config.cargo]
 loadOutDirsFromCheck = true
 
+###################
+# ZIG CONFIGURATION
+###################
+[[language]]
+name = "zig"
+auto-format = true
+# Helix uses the built-in `zig fmt` automatically
+
+[language-server.zls]
+command = "zls"
+
 ########################
 # PYTHON CONFIGURATION #
 ########################

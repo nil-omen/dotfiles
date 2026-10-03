@@ -23,4 +23,7 @@ layout {
         pane command="lazygit"
     }
     
+    tab name="AI" {
+        pane command="agy"
+    }
 }
