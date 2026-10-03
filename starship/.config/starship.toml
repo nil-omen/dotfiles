@@ -17,7 +17,7 @@ $fill\
 
 $status\
 $cmd_duration\
-$c$golang$java$nodejs$bun$python$rust$nix_shell$mise\
+$c$golang$java$nodejs$bun$python$rust$nix_shell$mise$zig\
 \n$character"""
 
 add_newline = false
@@ -110,32 +110,32 @@ format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 [java]
 symbol = ""
-style = "fg:blue bg:surface0"
+style = "fg:text bg:surface0"
 format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 [nodejs]
 symbol = "󰎙"
-style = "fg:blue bg:surface0"
+style = "fg:text bg:surface0"
 format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 [bun]
 symbol = ""
-style = "fg:blue bg:surface0"
+style = "fg:text bg:surface0"
 format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 [python]
 symbol = ' '
-style = "fg:blue bg:surface0"
+style = "fg:text bg:surface0"
 format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 [rust]
 symbol = ""
-style = "fg:blue bg:surface0"
+style = "fg:text bg:surface0"
 format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 [nix_shell]
 symbol = " "
-style = "fg:blue bg:surface0"
+style = "fg:text bg:surface0"
 format = '[$symbol ]($style)(fg:overlay0 bg:surface0)'
 
 [mise]
@@ -143,6 +143,11 @@ disabled = false
 symbol = "󰭼 "
 style = "fg:text bg:surface0"
 format = '[$symbol ]($style)(fg:overlay0 bg:surface0)'
+
+[zig]
+symbol = ""
+style = "fg:text bg:surface0"
+format = '[ $symbol $version ]($style)[](fg:overlay0 bg:surface0)'
 
 # --- SYSTEM MODULES ---
 [status]
