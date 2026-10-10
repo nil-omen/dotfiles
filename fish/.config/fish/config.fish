@@ -88,6 +88,9 @@ if status is-interactive
     # 'abbr' is preferred over 'alias' in Fish.
     # It expands the command in your prompt before you run it.
 
+    # Quick and easy file AND Folder removal
+    abbr --add rm 'rm -rf'
+
     # Navigation
     abbr --add .. 'cd ..'
     abbr --add ... 'cd ../..'

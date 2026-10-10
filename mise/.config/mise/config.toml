@@ -1,0 +1,31 @@
+[tools]
+go = "latest"
+node = "latest"
+zig = "latest"
+zls = "latest"
+
+# # Migrated from Nix (Native Mise Tools)
+# bat = "latest"
+# btop = "latest"
+# direnv = "latest"
+# eza = "latest"
+# fd = "latest"
+# fzf = "latest"
+# github-cli = "latest"
+# helix = "latest"
+# jq = "latest"
+# jj = "latest"
+# just = "latest"
+# lazydocker = "latest"
+# lazygit = "latest"
+# ripgrep = "latest"
+# starship = "latest"
+# zellij = "latest"
+# zoxide = "latest"
+
+# # Migrated from Nix (Using Cargo Backend)
+# "cargo:forgejo-cli" = "latest"
+# "cargo:just-lsp" = "latest"
+
+[settings]
+go_set_gobin = false
