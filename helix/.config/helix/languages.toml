@@ -45,10 +45,27 @@ command = "zls"
 ########################
 [[language]]
 name = "python"
-# Using 'ruff' is highly recommended for speed in DevOps scripts
-[language.formatter]
+auto-format = true
+language-servers = ["ty", "ruff"]
+formatter = { command = "ruff", args = ["format", "-"] }
+
+[language-server.ruff]
 command = "ruff"
-args = ["format", "-"]
+args = ["server"]
+
+[language-server.ty]
+command = "ty"
+
+###################
+# C CONFIGURATION #
+###################
+[[language]]
+name = "c"
+auto-format = true
+formatter = { command = "clang-format" }
+
+[language-server.clangd]
+command = "clangd"
 
 ########################
 # DEVOPS / CONFIG FILES #

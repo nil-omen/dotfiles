@@ -1,6 +1,7 @@
 [tools]
 go = "latest"
 node = "latest"
+uv = "latest"
 zig = "latest"
 zls = "latest"
 

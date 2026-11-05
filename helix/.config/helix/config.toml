@@ -25,13 +25,13 @@ hidden = false                 # Shows hidden files (dotfiles) in the file picke
 
 [editor.statusline]
 # Customizing the status bar to look cleaner and show more info
-left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
+left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control"]
 center = []
 right = ["diagnostics", "selections", "position", "file-encoding", "file-line-ending", "file-type"]
 separator = "│"
-mode.normal = "NORMAL"
-mode.insert = "INSERT"
-mode.select = "SELECT"
+mode.normal = "NOR"
+mode.insert = "INS"
+mode.select = "SEL"
 
 [editor.indent-guides]
 render = true                  # Shows vertical lines to help track indentation levels
